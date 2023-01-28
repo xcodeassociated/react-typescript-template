@@ -1,6 +1,6 @@
 import React from "react";
 import styled from 'styled-components';
-import {Menu} from "../menu/Menu";
+import {Menu} from "../Menu/Menu";
 
 const HomeWrapper = styled.div`
   font-size: 32px;

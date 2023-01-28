@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useKeycloak } from '@react-keycloak/web'
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { useAppSelector, useAppDispatch } from '../../Store/hooks';
 import {
   decrement,
   increment,
@@ -10,8 +9,7 @@ import {
   selectCount,
 } from './counterSlice';
 import styles from './Counter.module.css';
-import {Menu} from "../../menu/Menu";
-import { useNavigate } from 'react-router-dom';
+import {Menu} from "../Menu/Menu";
 
 export const Counter: React.FC = () => {
   const count = useAppSelector(selectCount);
@@ -19,11 +17,6 @@ export const Counter: React.FC = () => {
   const [incrementAmount, setIncrementAmount] = useState('2');
 
   const incrementValue = Number(incrementAmount) || 0;
-  const { initialized } = useKeycloak()
-
-  if (!initialized) {
-    return <div>Loading...</div>
-  }
 
   return (
       <div>
