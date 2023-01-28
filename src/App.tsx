@@ -1,8 +1,10 @@
 import React from 'react';
-import logo from './logo.svg';
 import { Counter } from './features/counter/Counter';
-import './App.css';
 import {useKeycloak} from "@react-keycloak/web";
+import {Route, Routes} from 'react-router-dom';
+import {Home} from "./home/Home";
+import Login from "./login/Login";
+import keycloak from "./features/counter/keycloak";
 
 const App: React.FC = () => {
     const { initialized } = useKeycloak()
@@ -13,10 +15,11 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-      </header>
+        <Routes>
+            <Route path='/' element={<Home />} />
+            {keycloak?.authenticated ? <Route path='/counter' element={<Counter />} /> : null}
+            <Route path='/login' element={<Login />} />
+        </Routes>
     </div>
   );
 }

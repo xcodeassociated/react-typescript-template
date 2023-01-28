@@ -9,6 +9,7 @@ import keycloak from "./features/counter/keycloak";
 import { ReactKeycloakProvider } from '@react-keycloak/web'
 import {AuthClientError, AuthClientEvent} from "@react-keycloak/core/lib/types";
 import {AuthClientTokens} from "@react-keycloak/core";
+import {BrowserRouter} from "react-router-dom";
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -27,7 +28,9 @@ root.render(
   <ReactKeycloakProvider authClient={keycloak} onEvent={onKeycloakEvent} onTokens={onKeycloakTokens} initOptions={{onLoad: 'check-sso'}}>
       <React.StrictMode>
         <Provider store={store}>
-          <App />
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
         </Provider>
       </React.StrictMode>
 </ReactKeycloakProvider>

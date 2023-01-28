@@ -10,6 +10,8 @@ import {
   selectCount,
 } from './counterSlice';
 import styles from './Counter.module.css';
+import {Menu} from "../../menu/Menu";
+import { useNavigate } from 'react-router-dom';
 
 export const Counter: React.FC = () => {
   const count = useAppSelector(selectCount);
@@ -17,7 +19,6 @@ export const Counter: React.FC = () => {
   const [incrementAmount, setIncrementAmount] = useState('2');
 
   const incrementValue = Number(incrementAmount) || 0;
-  const { keycloak } = useKeycloak()
   const { initialized } = useKeycloak()
 
   if (!initialized) {
@@ -26,17 +27,8 @@ export const Counter: React.FC = () => {
 
   return (
       <div>
-        {!keycloak?.authenticated ?
-            <button type="button" onClick={() => keycloak.login()}>
-              Login
-            </button>
-            : <></>}
+        <Menu />
 
-        {!!keycloak?.authenticated && (
-            <button type="button" onClick={() => keycloak.logout()}>
-              Logout
-            </button>
-        )}
         <div className={styles.row}>
           <button
               className={styles.button}
