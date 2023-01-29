@@ -1,12 +1,12 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './Store/store';
+import {createRoot} from 'react-dom/client';
+import {Provider} from 'react-redux';
+import {store} from './Store/store';
 import App from './Components/App/App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import keycloak from "./Keycloak/keycloak";
-import { ReactKeycloakProvider } from '@react-keycloak/web'
+import {ReactKeycloakProvider} from '@react-keycloak/web'
 import {AuthClientError, AuthClientEvent} from "@react-keycloak/core/lib/types";
 import {AuthClientTokens} from "@react-keycloak/core";
 import {BrowserRouter} from "react-router-dom";

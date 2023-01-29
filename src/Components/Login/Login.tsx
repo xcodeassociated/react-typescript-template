@@ -1,8 +1,8 @@
 import * as React from 'react'
 import {useCallback} from 'react'
-import { Navigate } from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 
-import { useKeycloak } from '@react-keycloak/web'
+import {useKeycloak} from '@react-keycloak/web'
 
 const LoginPage = () => {
   const { keycloak } = useKeycloak()

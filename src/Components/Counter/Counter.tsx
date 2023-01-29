@@ -1,15 +1,7 @@
-import React, { useState } from 'react';
-import { useAppSelector, useAppDispatch } from '../../Store/hooks';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
-} from './counterSlice';
+import React, {useState} from 'react';
+import {useAppDispatch, useAppSelector} from '../../Store/hooks';
+import {decrement, increment, incrementAsync, incrementByAmount, incrementIfOdd, selectCount,} from './counterSlice';
 import styles from './Counter.module.css';
-import {Menu} from "../Menu/Menu";
 
 export const Counter: React.FC = () => {
   const count = useAppSelector(selectCount);
@@ -20,8 +12,6 @@ export const Counter: React.FC = () => {
 
   return (
       <div>
-        <Menu />
-
         <div className={styles.row}>
           <button
               className={styles.button}

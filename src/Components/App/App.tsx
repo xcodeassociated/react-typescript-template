@@ -1,11 +1,12 @@
 import React from 'react';
-import { Counter } from '../Counter/Counter';
+import {Counter} from '../Counter/Counter';
 import {useKeycloak} from "@react-keycloak/web";
-import {Route, Routes} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import {Home} from "../Home/Home";
 import Login from "../Login/Login";
-import { Navigate, useLocation } from 'react-router-dom'
 import {NotFound} from "../NotFound/NotFound";
+import {Menu} from '../Menu/Menu';
+import {Users} from "../Users/Users";
 
 // @ts-ignore
 const ProtectedRoute = ({predicate, redirectPath = '/login', children}) => {
@@ -24,6 +25,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
+        <Menu />
         <Routes>
             <Route path='*' element={<NotFound />} />
             <Route path='/' element={<Home />} />
@@ -31,6 +33,11 @@ const App: React.FC = () => {
             <Route path='/counter' element={
                 <ProtectedRoute predicate={keycloak?.authenticated}>
                     <Counter />
+                </ProtectedRoute>
+            } />
+            <Route path='/users' element={
+                <ProtectedRoute predicate={keycloak?.authenticated}>
+                    <Users />
                 </ProtectedRoute>
             } />
         </Routes>
