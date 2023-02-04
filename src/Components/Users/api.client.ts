@@ -2,7 +2,8 @@ import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import {RolesResponseT, UsersResponseT} from "./api.types";
 import {UserInput} from "./Users";
 
-const API_URL = 'http://localhost:8080/coroutine' // jvm api
+const API_URL = 'http://localhost:8080/coroutine' // jvm api coroutine
+// const API_URL = 'http://localhost:8080/reactive' // jvm api reactive
 // const API_URL = 'http://localhost:4500' // node.js api
 
 const makeConfig = (token: string): AxiosRequestConfig => {

@@ -1,7 +1,8 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import {Provider} from 'react-redux';
-import {store} from './Store/store';
+import {persistor, store} from './Store/store';
+import { PersistGate } from 'redux-persist/integration/react'
 import App from './Components/App/App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
@@ -28,9 +29,11 @@ root.render(
   <ReactKeycloakProvider authClient={keycloak} onEvent={onKeycloakEvent} onTokens={onKeycloakTokens} initOptions={{onLoad: 'check-sso'}}>
       <React.StrictMode>
         <Provider store={store}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
+            <PersistGate loading={null} persistor={persistor}>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </PersistGate>
         </Provider>
       </React.StrictMode>
 </ReactKeycloakProvider>
