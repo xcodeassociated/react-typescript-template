@@ -26,8 +26,8 @@ export async function apiPostUser<T = UsersResponseT>(token: string, userInput: 
     return axios.post<T>(API_URL + '/users', userInput, makeConfig(token))
 }
 
-export async function apiPutUser<T = UsersResponseT>(token: string, id: string, name: string, email: string, role: string): Promise<AxiosResponse<T, any>> {
-    return axios.put<T>(API_URL + '/users/' + id, {name: name, email: email, role: role}, makeConfig(token))
+export async function apiPutUser<T = UsersResponseT>(token: string, id: string, name: string, email: string, role: string, version: number | undefined): Promise<AxiosResponse<T, any>> {
+    return axios.put<T>(API_URL + '/users/' + id, {name: name, email: email, role: role, version: version}, makeConfig(token))
 }
 
 export async function apiDeleteUser<T = void>(token: string, id: string): Promise<AxiosResponse<T, any>> {

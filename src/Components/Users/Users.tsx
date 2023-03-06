@@ -11,14 +11,18 @@ export class UserInput {
     name: string = "";
     role: string = "";
 
+    version: number | undefined;
+
     constructor(id: string | undefined = undefined,
                 email: string = "",
                 name: string = "",
-                role: string = "") {
+                role: string = "",
+                version: number | undefined = undefined) {
         this._id = id
         this.email = email;
         this.name = name;
         this.role = role;
+        this.version = version;
     }
 }
 
@@ -103,7 +107,7 @@ export const Users: React.FC<UsersPropsI> = () => {
 
     const handleUserUpdate = async () => {
         if (notNil(userInput.name) && notNil(userInput.role)) {
-            const response = await apiPutUser(keycloak.token!!, userInput._id!!, userInput.name, userInput.email, userInput.role)
+            const response = await apiPutUser(keycloak.token!!, userInput._id!!, userInput.name, userInput.email, userInput.role, userInput.version)
             if (response.status === 200) {
                 getUsers()
                     .then(() => cancelUpdate())
@@ -130,7 +134,7 @@ export const Users: React.FC<UsersPropsI> = () => {
 
     const handleUpdate = (user: UserT) => {
         setUpdate(true);
-        setUserInput(new UserInput(user._id, user.email, user.name, user.role[0]._id)) // todo: fix limitation of user role to 1
+        setUserInput(new UserInput(user._id, user.email, user.name, user.role[0]._id, user.version)) // todo: fix limitation of user role to 1
     }
 
     const cancelUpdate = () => setUpdate(false)
