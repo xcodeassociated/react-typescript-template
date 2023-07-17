@@ -5,6 +5,7 @@ import {UserInput} from "./Users";
 const API_URL = 'http://localhost:8080/coroutine' // jvm api coroutine
 // const API_URL = 'http://localhost:8080/reactive' // jvm api reactive
 // const API_URL = 'http://localhost:4500' // node.js api
+// const API_URL = 'http://localhost:8082' // jvm api jpa
 
 const makeConfig = (token: string): AxiosRequestConfig => {
     return {
