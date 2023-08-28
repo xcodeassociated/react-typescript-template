@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import {TRole, TUser} from "./api/api.types";
 import {apiDeleteUser, apiGetRoles, apiGetUsers, apiPostUser, apiPutUser} from "./api/api.client";
 import keycloak from "../../Keycloak/keycloak";
+import {useRoles} from "./hooks/useRoles";
+import {useUsers} from "./hooks/useUsers";
 
 
 export class UserInput {
@@ -31,52 +33,17 @@ const notNil = (input: string | undefined) => (input?.trim()?.length || 0) > 0;
 interface IUsersProps {}
 
 export const Users: React.FC<IUsersProps> = () => {
-    const [users, setUsers] = useState<TUser[]>()
-    const [roles, setRoles] = useState<TRole[]>()
+    const { roles } = useRoles()
+    const { users, updateUsers } = useUsers()
 
     const [userInput, setUserInput] = useState<UserInput>(new UserInput())
     const [update, setUpdate] = useState<boolean>(false)
-
-    useEffect(() => {
-        if (!roles) {
-            getRoles()
-                .catch(error => console.error(error))
-        }
-        if (!users) {
-            getUsers()
-                .catch(error => console.error(error))
-        }
-    })
 
     useEffect(() => {
         if (!update) {
             setUserInput(new UserInput())
         }
     }, [update])
-
-    const getUsers = async () => {
-        const response = await apiGetUsers(keycloak.token!!)
-        if (response.status === 200) {
-            setUsers([...response.data])
-        } else {
-            console.error(response)
-            alert('cannot get users form api')
-        }
-    }
-
-    const getRoles = async () => {
-        const response = await apiGetRoles(keycloak.token!!)
-        if (response.status === 200){
-            const fetched = response.data
-            setRoles([...fetched])
-
-            let role = fetched?.at(0)?._id
-            setUserInput({...userInput, role: role ? role : ""})
-        } else {
-            console.error(response)
-            alert('cannot get roles form api')
-        }
-    }
 
     const handleNameChane = (e: ChangeEvent<HTMLInputElement>) =>
         setUserInput({...userInput, name: e.target.value})
@@ -95,12 +62,9 @@ export const Users: React.FC<IUsersProps> = () => {
         if (notNil(userInput.name) && notNil(userInput.email) && notNil(userInput.role)) {
             const response = await apiPostUser(keycloak.token!!, userInput)
             if (response.status === 201 || response.status === 200) {
-                getUsers()
-                    .then(() => clearUserInput())
-                    .catch(error => console.error(error))
+                updateUsers()
             } else {
                 console.error(response)
-                alert('cannot create the user')
             }
         } else {
             showFormIncorrect()
@@ -111,12 +75,9 @@ export const Users: React.FC<IUsersProps> = () => {
         if (notNil(userInput.name) && notNil(userInput.role)) {
             const response = await apiPutUser(keycloak.token!!, userInput._id!!, userInput.name, userInput.email, userInput.role, userInput.version)
             if (response.status === 200) {
-                getUsers()
-                    .then(() => cancelUpdate())
-                    .catch(error => console.error(error))
+                updateUsers()
             } else {
                 console.error(response)
-                alert('cannot update the user')
             }
         } else {
             showFormIncorrect()
@@ -126,11 +87,9 @@ export const Users: React.FC<IUsersProps> = () => {
     const deleteUser = async (id: string) => {
         const response = await apiDeleteUser(keycloak.token!!, id)
         if (response.status === 200) {
-            getUsers()
-                .catch(error => console.error(error))
+            updateUsers()
         } else {
             console.error(response)
-            alert('cannot delete the user')
         }
     }
 
