@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import styled from 'styled-components';
-import {RoleT, UserT} from "./api.types";
-import {apiDeleteUser, apiGetRoles, apiGetUsers, apiPostUser, apiPutUser} from "./api.client";
+import {RoleT, UserT} from "./api/api.types";
+import {apiDeleteUser, apiGetRoles, apiGetUsers, apiPostUser, apiPutUser} from "./api/api.client";
 import keycloak from "../../Keycloak/keycloak";
 
 

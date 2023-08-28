@@ -1,6 +1,6 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
 import {RolesResponseT, UsersResponseT} from "./api.types";
-import {UserInput} from "./Users";
+import {UserInput} from "../Users";
 
 const API_URL = 'http://localhost:8080/coroutine' // jvm api coroutine
 // const API_URL = 'http://localhost:8080/reactive' // jvm api reactive
