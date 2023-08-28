@@ -10,8 +10,6 @@ export interface Role {
     modifiedDate: string | undefined;
 }
 
-export type TRolesResponse = Role[]
-
 export interface User {
     readonly _id: string | undefined;
     name: string;
@@ -24,6 +22,4 @@ export interface User {
     modifiedBy: string | undefined;
     modifiedDate: string | undefined;
 }
-
-export type TUsersResponse = User[]
 

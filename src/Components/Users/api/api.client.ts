@@ -1,6 +1,5 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
-import {TRolesResponse, TUsersResponse, User} from "./api.types";
-import {UserInput} from "../Users";
+import {Role, User} from "./api.types";
 
 const API_URL = 'http://localhost:8080/coroutine' // jvm api coroutine
 // const API_URL = 'http://localhost:8080/reactive' // jvm api reactive
@@ -15,19 +14,19 @@ const makeConfig = (token: string): AxiosRequestConfig => {
     }
 }
 
-export async function apiGetUsers<T = TUsersResponse>(token: string): Promise<AxiosResponse<T, any>> {
+export async function apiGetUsers<T = User[]>(token: string): Promise<AxiosResponse<T, any>> {
     return axios.get<T>(API_URL + '/users', makeConfig(token))
 }
 
-export async function apiGetRoles<T = TRolesResponse>(token: string): Promise<AxiosResponse<TRolesResponse, any>> {
-    return axios.get<TRolesResponse>(API_URL + '/permissions', makeConfig(token))
+export async function apiGetRoles<T = Role[]>(token: string): Promise<AxiosResponse<T, any>> {
+    return axios.get<T>(API_URL + '/permissions', makeConfig(token))
 }
 
-export async function apiPostUser<T = TUsersResponse>(token: string, user: User): Promise<AxiosResponse<T, any>> {
+export async function apiPostUser<T = User[]>(token: string, user: User): Promise<AxiosResponse<T, any>> {
     return axios.post<T>(API_URL + '/users', {name: user.name, email: user.email, role: user.role.map(e => e._id), version: user.version}, makeConfig(token))
 }
 
-export async function apiPutUser<T = TUsersResponse>(token: string, user: User): Promise<AxiosResponse<T, any>> {
+export async function apiPutUser<T = User[]>(token: string, user: User): Promise<AxiosResponse<T, any>> {
     return axios.put<T>(API_URL + '/users/' + user._id, {name: user.name, email: user.email, role: user.role.map(e => e._id), version: user.version}, makeConfig(token))
 }
 
