@@ -5,6 +5,7 @@ import {apiDeleteUser, apiGetRoles, apiGetUsers, apiPostUser, apiPutUser} from "
 import keycloak from "../../Keycloak/keycloak";
 import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
+import {notNil} from "./utils/utils";
 
 
 export class UserInput {
@@ -28,11 +29,7 @@ export class UserInput {
     }
 }
 
-const notNil = (input: string | undefined) => (input?.trim()?.length || 0) > 0;
-
-interface IUsersProps {}
-
-export const Users: React.FC<IUsersProps> = () => {
+export const Users: React.FC = () => {
     const { roles } = useRoles()
     const { users, updateUsers } = useUsers()
 
