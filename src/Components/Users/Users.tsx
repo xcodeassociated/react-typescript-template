@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import styled from 'styled-components';
-import {RoleT, UserT} from "./api/api.types";
+import {TRole, TUser} from "./api/api.types";
 import {apiDeleteUser, apiGetRoles, apiGetUsers, apiPostUser, apiPutUser} from "./api/api.client";
 import keycloak from "../../Keycloak/keycloak";
 
@@ -28,11 +28,12 @@ export class UserInput {
 
 const notNil = (input: string | undefined) => (input?.trim()?.length || 0) > 0;
 
-interface UsersPropsI {}
+interface IUsersProps {}
 
-export const Users: React.FC<UsersPropsI> = () => {
-    const [users, setUsers] = useState<UserT[]>()
-    const [roles, setRoles] = useState<RoleT[]>()
+export const Users: React.FC<IUsersProps> = () => {
+    const [users, setUsers] = useState<TUser[]>()
+    const [roles, setRoles] = useState<TRole[]>()
+
     const [userInput, setUserInput] = useState<UserInput>(new UserInput())
     const [update, setUpdate] = useState<boolean>(false)
 
@@ -68,6 +69,7 @@ export const Users: React.FC<UsersPropsI> = () => {
         if (response.status === 200){
             const fetched = response.data
             setRoles([...fetched])
+
             let role = fetched?.at(0)?._id
             setUserInput({...userInput, role: role ? role : ""})
         } else {
@@ -132,7 +134,7 @@ export const Users: React.FC<UsersPropsI> = () => {
         }
     }
 
-    const handleUpdate = (user: UserT) => {
+    const handleUpdate = (user: TUser) => {
         setUpdate(true);
         setUserInput(new UserInput(user._id, user.email, user.name, user.role[0]._id, user.version)) // todo: fix limitation of user role to 1
     }
@@ -162,7 +164,7 @@ export const Users: React.FC<UsersPropsI> = () => {
                         }
                         <span>
                             role: <select name={"role"} value={userInput.role} onChange={handleSelectChange}>
-                                {roles?.map((role: RoleT) =>
+                                {roles?.map((role: TRole) =>
                                     <option key={role._id} value={role._id}>{role.name}</option>)
                                 }
                             </select>
@@ -193,7 +195,7 @@ export const Users: React.FC<UsersPropsI> = () => {
                                     <tr key={user._id}>
                                         <td><span>{user.name}</span></td>
                                         <td><span>{user.email}</span></td>
-                                        <td><span>{user.role.map((role: RoleT) => role.name)}</span></td>
+                                        <td><span>{user.role.map((role: TRole) => role.name)}</span></td>
                                         <td>
                                             <span>
                                                 <button name={"submit"} type={"submit"} onClick={() => handleUpdate(user)}>update</button>

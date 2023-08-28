@@ -1,4 +1,4 @@
-export type RoleT = {
+export type TRole = {
     readonly _id: string,
     name: string,
     description: string
@@ -10,13 +10,13 @@ export type RoleT = {
     modifiedDate: string | undefined;
 }
 
-export type RolesResponseT = RoleT[]
+export type RolesResponseT = TRole[]
 
-export type UserT = {
+export type TUser = {
     readonly _id: string;
     name: string;
     email: string;
-    role: RoleT[];
+    role: TRole[];
 
     version: number | undefined;
     createdBy: string | undefined;
@@ -25,10 +25,5 @@ export type UserT = {
     modifiedDate: string | undefined;
 }
 
-export type UsersResponseT = UserT[]
-
-export type UserUpdateT = {
-    name: string;
-    role: string;
-}
+export type UsersResponseT = TUser[]
 
