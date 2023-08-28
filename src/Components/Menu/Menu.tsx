@@ -16,7 +16,6 @@ export const Menu: React.FC = () => {
                 <button type="button" onClick={() =>  keycloak.logout()}>
                     Logout
                 </button> : <></>}
-            <hr />
         </div>
     )
 }

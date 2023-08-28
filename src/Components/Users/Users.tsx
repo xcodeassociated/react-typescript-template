@@ -1,9 +1,11 @@
-import React, {ChangeEvent, useEffect, useMemo, useReducer, useState} from "react";
+import React, {useReducer} from "react";
 import styled from 'styled-components';
 import {Role, User} from "./api/api.types";
 import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
 import {notNil} from "./utils/utils";
+import type {ColumnsType} from 'antd/es/table';
+import {Input, Table, Typography, Button, Select, Col, Divider, Row} from 'antd';
 
 
 class State {
@@ -39,13 +41,13 @@ function reducer(prevState: State = new State(), action: Action): State {
     const init = new State()
     switch (action.type) {
         case "INPUT_RESET":
-            return { ...prevState, ...init }
+            return { ...prevState, ...init, updateMode: false }
         case "INPUT_CANCEL_UPDATE":
             return { ...prevState, ...init, updateMode: false }
         case "VALUE_CHANGE":
             return { ...action.payload }
         case "INPUT_UPDATE":
-            return { ...prevState, ...action.payload, updateMode: true }
+            return { ...action.payload, updateMode: true }
     }
 }
 
@@ -63,6 +65,7 @@ export const Users: React.FC = () => {
     const handleUserCreate = async () => {
         if (notNil(userInput.name) && notNil(userInput.email) && notNil(userInput.role)) {
             await createUser(userInputToUser(userInput, roles!!))
+            dispatch({type: "INPUT_RESET"})
         } else {
             showError()
         }
@@ -71,6 +74,7 @@ export const Users: React.FC = () => {
     const handleUserUpdate = async () => {
         if (notNil(userInput.name) && notNil(userInput.role)) {
             await updateUser(userInputToUser(userInput, roles!!))
+            dispatch({type: "INPUT_RESET"})
         } else {
             showError()
         }
@@ -80,80 +84,125 @@ export const Users: React.FC = () => {
         await deleteUser(id)
     }
 
+
+    const columns: ColumnsType<User> = [
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: '_id',
+            width: '20%',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            width: '30%',
+        },
+        {
+            title: 'Role',
+            dataIndex: 'role',
+            render: (_: any, user: User) => {
+                return (
+                    user.role.map((role: Role) => role.name)
+                )
+            }
+        },
+        {
+            title: 'operation',
+            dataIndex: 'operation',
+            render: (_: any, user: User) => {
+                return (
+                    <span>
+                        <Typography.Link onClick={
+                        () => dispatch({
+                            type: "INPUT_UPDATE",
+                            payload: new State(user._id, user.email, user.name, user.role[0]._id, user.version)
+                        })}>
+                            Update
+                        </Typography.Link>
+                        <br />
+                        <Typography.Link onClick={() => handleDeleteUser(user._id!!)}>
+                            Delete
+                        </Typography.Link>
+                    </span>
+                );
+            },
+        },
+    ];
+
     return (
         <UsersWrapper>
             <div>
                 <div>
-                    users page
-                </div>
-                <br />
-                <div>
-                    <span>
-                        name: <input type={"text"} name={"name"} value={userInput.name} onChange={
-                            (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, name: e.target.value}})
-                        } />
-                    </span>
+                    <Divider orientation="left">User Data</Divider>
+                    <Row gutter={16}>
+                        <Col className="gutter-row" span={2}>
+                            <div>
+                                Name
+                            </div>
+                        </Col>
+                        <Col className="gutter-row" span={8}>
+                            <div>
+                                <Input type={"text"} name={"name"} value={userInput.name} onChange={
+                                    (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, name: e.target.value}})
+                                } />
+                            </div>
+                        </Col>
+                    </Row>
                     {!userInput.updateMode ?
-                        <>
-                            <span>
-                                email: <input type={"email"} name={"email"} value={userInput.email} onChange={
-                                (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, email: e.target.value}})
-                            } />
-                            </span>
-                        </> : null
+                        <Row gutter={16}>
+                            <Col className="gutter-row" span={2}>
+                                <div>
+                                    Email
+                                </div>
+                            </Col>
+                            <Col className="gutter-row" span={8}>
+                                <div>
+                                    <Input type={"email"} name={"email"} value={userInput.email} onChange={
+                                        (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, email: e.target.value}})
+                                    } />
+                                </div>
+                            </Col>
+                        </Row> : null
                     }
-                    <span>
-                        role: <select name={"role"} value={userInput.role} onChange={
-                            (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, role: e.target.value}})
-                        }>
-                            {roles?.map((role: Role) =>
-                                <option key={role._id} value={role._id}>{role.name}</option>)
+                    <Row gutter={16}>
+                        <Col className="gutter-row" span={2}>
+                            <div>
+                                Role
+                            </div>
+                        </Col>
+                        <Col className="gutter-row" span={8}>
+                            <div>
+                                <Select style={{ width: 600 }} value={userInput.role} onChange={
+                                    (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, role: e}})
+                                }>
+                                    {roles?.map((role: Role) =>
+                                        <Select.Option key={role._id} value={role._id}>{role.name}</Select.Option>)
+                                    }
+                                </Select>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col className="gutter-row" span={2}>
+                            <Button name={"submit"} type={"primary"} onClick={submitForm}>Submit</Button>
+                        </Col>
+                        <Col className="gutter-row" span={2}>
+                            {userInput.updateMode ?
+                                <Button name={"cancelUpdate"} onClick={() => dispatch({type: "INPUT_CANCEL_UPDATE"})}>Cancel</Button>
+                                :
+                                <Button name={"cancelUpdate"} onClick={() => dispatch({type: "INPUT_RESET"})}>Clear</Button>
                             }
-                        </select>
-                    </span>
-                    <span>
-                        <button name={"submit"} type={"submit"} onClick={submitForm}>submit</button>
-                    </span>
-                    {userInput.updateMode ?
-                        <>
-                            <button name={"cancelUpdate"} onClick={() => dispatch({type: "INPUT_CANCEL_UPDATE"})}>cancel update</button>
-                        </> :
-                        <>
-                            <button name={"cancelUpdate"} onClick={() => dispatch({type: "INPUT_RESET"})}>clear</button>
-                        </>
-                    }
+                        </Col>
+                    </Row>
                 </div>
-                <br />
+                <Divider orientation="left">Users Table</Divider>
                 <div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Actions</th>
-                            </tr>
-                            {users?.map(user => (
-                                <tr key={user._id}>
-                                    <td><span>{user.name}</span></td>
-                                    <td><span>{user.email}</span></td>
-                                    <td><span>{user.role.map((role: Role) => role.name)}</span></td>
-                                    <td>
-                                        <span>
-                                            <button name={"submit"} type={"submit"} onClick={
-                                                () => dispatch({
-                                                    type: "INPUT_UPDATE",
-                                                    payload: new State(user._id, user.email, user.name, user.role[0]._id, user.version)
-                                                })}>update</button>
-                                        </span>
-                                        <span>
-                                            <button name={"delete"} onClick={() => handleDeleteUser(user._id!!)}>delete</button>
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                    <Table
+                        bordered
+                        dataSource={users}
+                        columns={columns}
+                        rowClassName="editable-row"
+                        />
                 </div>
             </div>
         </UsersWrapper>

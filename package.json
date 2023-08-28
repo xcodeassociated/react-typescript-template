@@ -18,6 +18,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/redux-persist": "^4.3.1",
     "@types/styled-components": "^5.1.26",
+    "antd": "^5.8.5",
     "axios": "^1.4.0",
     "jwt-decode": "^3.1.2",
     "keycloak-js": "^22.0.0",

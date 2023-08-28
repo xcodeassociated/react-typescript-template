@@ -51,10 +51,6 @@ export const useUsers = () => {
 
     return {
         users,
-        updateUsers: () => {
-            getUsers()
-                .catch(error => console.error(error))
-        },
         createUser,
         updateUser,
         deleteUser
