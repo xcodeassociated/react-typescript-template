@@ -1,11 +1,9 @@
 import React, {ChangeEvent, useEffect, useState} from "react";
 import styled from 'styled-components';
-import {TRole, TUser} from "./api/api.types";
-import {apiDeleteUser, apiGetRoles, apiGetUsers, apiPostUser, apiPutUser} from "./api/api.client";
-import keycloak from "../../Keycloak/keycloak";
+import {Role, User} from "./api/api.types";
 import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
-import {notNil} from "./utils/utils";
+import {notNil, userInputToUser} from "./utils/utils";
 
 
 export class UserInput {
@@ -31,7 +29,7 @@ export class UserInput {
 
 export const Users: React.FC = () => {
     const { roles } = useRoles()
-    const { users, updateUsers } = useUsers()
+    const { users, createUser, updateUser, deleteUser } = useUsers()
 
     const [userInput, setUserInput] = useState<UserInput>(new UserInput())
     const [update, setUpdate] = useState<boolean>(false)
@@ -42,27 +40,13 @@ export const Users: React.FC = () => {
         }
     }, [update])
 
-    const handleNameChane = (e: ChangeEvent<HTMLInputElement>) =>
-        setUserInput({...userInput, name: e.target.value})
-
-    const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
-        setUserInput({...userInput, email: e.target.value})
-
-    const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) =>
-        setUserInput({...userInput, role: e.target.value})
-
     const showFormIncorrect = () => alert('form not complete')
 
     const submitForm = () => update ? handleUserUpdate() : handleUserCreate()
 
     const handleUserCreate = async () => {
         if (notNil(userInput.name) && notNil(userInput.email) && notNil(userInput.role)) {
-            const response = await apiPostUser(keycloak.token!!, userInput)
-            if (response.status === 201 || response.status === 200) {
-                updateUsers()
-            } else {
-                console.error(response)
-            }
+            await createUser(userInputToUser(userInput, roles!!))
         } else {
             showFormIncorrect()
         }
@@ -70,29 +54,19 @@ export const Users: React.FC = () => {
 
     const handleUserUpdate = async () => {
         if (notNil(userInput.name) && notNil(userInput.role)) {
-            const response = await apiPutUser(keycloak.token!!, userInput._id!!, userInput.name, userInput.email, userInput.role, userInput.version)
-            if (response.status === 200) {
-                updateUsers()
-            } else {
-                console.error(response)
-            }
+            await updateUser(userInputToUser(userInput, roles!!))
         } else {
             showFormIncorrect()
         }
     }
 
-    const deleteUser = async (id: string) => {
-        const response = await apiDeleteUser(keycloak.token!!, id)
-        if (response.status === 200) {
-            updateUsers()
-        } else {
-            console.error(response)
-        }
+    const handleDeleteUser = async (id: string) => {
+        await deleteUser(id)
     }
 
-    const handleUpdate = (user: TUser) => {
+    const handleUpdate = (user: User) => {
         setUpdate(true);
-        setUserInput(new UserInput(user._id, user.email, user.name, user.role[0]._id, user.version)) // todo: fix limitation of user role to 1
+        setUserInput(new UserInput(user._id, user.email, user.name, user.role[0]._id, user.version))
     }
 
     const cancelUpdate = () => setUpdate(false)
@@ -109,18 +83,24 @@ export const Users: React.FC = () => {
                     <br />
                     <div>
                         <span>
-                            name: <input type={"text"} name={"name"} value={userInput.name} onChange={handleNameChane} />
+                            name: <input type={"text"} name={"name"} value={userInput.name} onChange={
+                                (e) => setUserInput({...userInput, name: e.target.value})
+                            } />
                         </span>
                         {!update ?
                             <>
                                 <span>
-                                    email: <input type={"email"} name={"email"} value={userInput.email} onChange={handleEmailChange} />
+                                    email: <input type={"email"} name={"email"} value={userInput.email} onChange={
+                                    (e) => setUserInput({...userInput, email: e.target.value})
+                                } />
                                 </span>
                             </> : null
                         }
                         <span>
-                            role: <select name={"role"} value={userInput.role} onChange={handleSelectChange}>
-                                {roles?.map((role: TRole) =>
+                            role: <select name={"role"} value={userInput.role} onChange={
+                                (e) => setUserInput({...userInput, role: e.target.value})
+                            }>
+                                {roles?.map((role: Role) =>
                                     <option key={role._id} value={role._id}>{role.name}</option>)
                                 }
                             </select>
@@ -151,13 +131,13 @@ export const Users: React.FC = () => {
                                     <tr key={user._id}>
                                         <td><span>{user.name}</span></td>
                                         <td><span>{user.email}</span></td>
-                                        <td><span>{user.role.map((role: TRole) => role.name)}</span></td>
+                                        <td><span>{user.role.map((role: Role) => role.name)}</span></td>
                                         <td>
                                             <span>
                                                 <button name={"submit"} type={"submit"} onClick={() => handleUpdate(user)}>update</button>
                                             </span>
                                             <span>
-                                                <button name={"delete"} onClick={() => deleteUser(user._id)}>delete</button>
+                                                <button name={"delete"} onClick={() => handleDeleteUser(user._id!!)}>delete</button>
                                             </span>
                                         </td>
                                     </tr>

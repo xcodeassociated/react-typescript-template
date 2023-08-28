@@ -1,11 +1,11 @@
 import {useEffect, useState} from "react";
-import {TRole} from "../api/api.types";
+import {Role} from "../api/api.types";
 import {apiGetRoles} from "../api/api.client";
 import keycloak from "../../../Keycloak/keycloak";
 
 
 export const useRoles = () => {
-    const [roles, setRoles] = useState<TRole[]>()
+    const [roles, setRoles] = useState<Role[]>()
     useEffect(() => {
         if (!roles) {
             getRoles()

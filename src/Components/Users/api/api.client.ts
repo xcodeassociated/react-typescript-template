@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
-import {RolesResponseT, UsersResponseT} from "./api.types";
+import {TRolesResponse, TUsersResponse, User} from "./api.types";
 import {UserInput} from "../Users";
 
 const API_URL = 'http://localhost:8080/coroutine' // jvm api coroutine
@@ -15,20 +15,20 @@ const makeConfig = (token: string): AxiosRequestConfig => {
     }
 }
 
-export async function apiGetUsers<T = UsersResponseT>(token: string): Promise<AxiosResponse<T, any>> {
+export async function apiGetUsers<T = TUsersResponse>(token: string): Promise<AxiosResponse<T, any>> {
     return axios.get<T>(API_URL + '/users', makeConfig(token))
 }
 
-export async function apiGetRoles<T = RolesResponseT>(token: string): Promise<AxiosResponse<RolesResponseT, any>> {
-    return axios.get<RolesResponseT>(API_URL + '/permissions', makeConfig(token))
+export async function apiGetRoles<T = TRolesResponse>(token: string): Promise<AxiosResponse<TRolesResponse, any>> {
+    return axios.get<TRolesResponse>(API_URL + '/permissions', makeConfig(token))
 }
 
-export async function apiPostUser<T = UsersResponseT>(token: string, userInput: UserInput): Promise<AxiosResponse<T, any>> {
-    return axios.post<T>(API_URL + '/users', userInput, makeConfig(token))
+export async function apiPostUser<T = TUsersResponse>(token: string, user: User): Promise<AxiosResponse<T, any>> {
+    return axios.post<T>(API_URL + '/users', {name: user.name, email: user.email, role: user.role.map(e => e._id), version: user.version}, makeConfig(token))
 }
 
-export async function apiPutUser<T = UsersResponseT>(token: string, id: string, name: string, email: string, role: string, version: number | undefined): Promise<AxiosResponse<T, any>> {
-    return axios.put<T>(API_URL + '/users/' + id, {name: name, email: email, role: role, version: version}, makeConfig(token))
+export async function apiPutUser<T = TUsersResponse>(token: string, user: User): Promise<AxiosResponse<T, any>> {
+    return axios.put<T>(API_URL + '/users/' + user._id, {name: user.name, email: user.email, role: user.role.map(e => e._id), version: user.version}, makeConfig(token))
 }
 
 export async function apiDeleteUser<T = void>(token: string, id: string): Promise<AxiosResponse<T, any>> {
