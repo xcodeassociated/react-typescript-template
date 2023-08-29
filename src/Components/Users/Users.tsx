@@ -3,87 +3,71 @@ import styled from 'styled-components';
 import {Role, User} from "./api/api.types";
 import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
-import {notNil} from "./utils/utils";
 import type {ColumnsType} from 'antd/es/table';
-import {Input, Table, Typography, Button, Select, Col, Divider, Row} from 'antd';
+import {Input, Table, Typography, Button, Select, Col, Divider, Row, Form} from 'antd';
 
 
 class State {
-    _id: string | undefined;
-    email: string = "";
-    name: string = "";
-    role: string = "";
-    version: number | undefined;
-    updateMode: boolean = false;
+    page: number = 1
+    pageSize: number = 10
 
-    constructor(id: string | undefined = undefined,
-                email: string = "",
-                name: string = "",
-                role: string = "",
-                version: number | undefined = undefined,
-                update: boolean = false) {
-        this._id = id
-        this.email = email;
-        this.name = name;
-        this.role = role;
-        this.version = version;
-        this.updateMode = update
+    constructor(page: number = 1, pageSize: number = 10) {
+        this.page = page
+        this.pageSize = pageSize
     }
 }
 
 type Action =
-    | {type: "INPUT_RESET"}
-    | {type: "INPUT_CANCEL_UPDATE"}
-    | {type: "VALUE_CHANGE", payload: State}
-    | {type: "INPUT_UPDATE", payload: State}
+    | {type: "PAGINATION_CHANGED", payload: State}
 
 function reducer(prevState: State = new State(), action: Action): State {
-    const init = new State()
     switch (action.type) {
-        case "INPUT_RESET":
-            return { ...prevState, ...init, updateMode: false }
-        case "INPUT_CANCEL_UPDATE":
-            return { ...prevState, ...init, updateMode: false }
-        case "VALUE_CHANGE":
-            return { ...action.payload }
-        case "INPUT_UPDATE":
-            return { ...action.payload, updateMode: true }
+        case "PAGINATION_CHANGED":
+            console.log(`reducer: PAGINATION_CHANGED with: ${JSON.stringify(action.payload)}`)
+            return { ...prevState, ...action.payload }
     }
 }
 
 export const Users: React.FC = () => {
     const { roles } = useRoles()
     const { users, createUser, updateUser, deleteUser } = useUsers()
-    const [userInput, dispatch] = useReducer(reducer, new State())
-
-    const showError = () => {
-        alert('form not complete')
-    }
-
-    const submitForm = () => userInput.updateMode ? handleUserUpdate() : handleUserCreate()
-
-    const handleUserCreate = async () => {
-        if (notNil(userInput.name) && notNil(userInput.email) && notNil(userInput.role)) {
-            await createUser(userInputToUser(userInput, roles!!))
-            dispatch({type: "INPUT_RESET"})
-        } else {
-            showError()
-        }
-    }
-
-    const handleUserUpdate = async () => {
-        if (notNil(userInput.name) && notNil(userInput.role)) {
-            await updateUser(userInputToUser(userInput, roles!!))
-            dispatch({type: "INPUT_RESET"})
-        } else {
-            showError()
-        }
-    }
+    const [state, dispatch] = useReducer(reducer, new State())
+    const [form] = Form.useForm();
+    const id = Form.useWatch("_id", form)
 
     const handleDeleteUser = async (id: string) => {
         await deleteUser(id)
     }
 
+    const { Option } = Select;
+
+    const layout = {
+        labelCol: { span: 2 },
+        wrapperCol: { span: 16 },
+    };
+
+    const tailLayout = {
+        wrapperCol: { offset: 2, span: 16 },
+    };
+
+    const onFinish = async (values: any) => {
+        console.log(values);
+        if (!values._id) {
+            await createUser(userInputToUser(values, roles!!))
+            form.resetFields();
+        } else {
+            await updateUser(userInputToUser(values, roles!!))
+            form.resetFields();
+        }
+    };
+
+    const onReset = () => {
+        form.resetFields();
+    };
+
+    const updateFormValues = (user: User) => {
+        form.setFieldsValue({ name: user.name, email: user.email, role: user.role[0]._id, _id: user._id, version: user.version });
+    }
 
     const columns: ColumnsType<User> = [
         {
@@ -112,11 +96,7 @@ export const Users: React.FC = () => {
             render: (_: any, user: User) => {
                 return (
                     <span>
-                        <Typography.Link onClick={
-                        () => dispatch({
-                            type: "INPUT_UPDATE",
-                            payload: new State(user._id, user.email, user.name, user.role[0]._id, user.version)
-                        })}>
+                        <Typography.Link onClick={() => updateFormValues(user)}>
                             Update
                         </Typography.Link>
                         <br />
@@ -131,80 +111,61 @@ export const Users: React.FC = () => {
 
     return (
         <UsersWrapper>
-            <div>
-                <div>
-                    <Divider orientation="left">User Data</Divider>
-                    <Row gutter={16}>
-                        <Col className="gutter-row" span={2}>
-                            <div>
-                                Name
-                            </div>
-                        </Col>
-                        <Col className="gutter-row" span={8}>
-                            <div>
-                                <Input type={"text"} name={"name"} value={userInput.name} onChange={
-                                    (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, name: e.target.value}})
-                                } />
-                            </div>
-                        </Col>
-                    </Row>
-                    {!userInput.updateMode ?
-                        <Row gutter={16}>
-                            <Col className="gutter-row" span={2}>
-                                <div>
-                                    Email
-                                </div>
-                            </Col>
-                            <Col className="gutter-row" span={8}>
-                                <div>
-                                    <Input type={"email"} name={"email"} value={userInput.email} onChange={
-                                        (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, email: e.target.value}})
-                                    } />
-                                </div>
-                            </Col>
-                        </Row> : null
-                    }
-                    <Row gutter={16}>
-                        <Col className="gutter-row" span={2}>
-                            <div>
-                                Role
-                            </div>
-                        </Col>
-                        <Col className="gutter-row" span={8}>
-                            <div>
-                                <Select style={{ width: 600 }} value={userInput.role} onChange={
-                                    (e) => dispatch({type: "VALUE_CHANGE", payload: {...userInput, role: e}})
-                                }>
-                                    {roles?.map((role: Role) =>
-                                        <Select.Option key={role._id} value={role._id}>{role.name}</Select.Option>)
-                                    }
-                                </Select>
-                            </div>
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col className="gutter-row" span={2}>
-                            <Button name={"submit"} type={"primary"} onClick={submitForm}>Submit</Button>
-                        </Col>
-                        <Col className="gutter-row" span={2}>
-                            {userInput.updateMode ?
-                                <Button name={"cancelUpdate"} onClick={() => dispatch({type: "INPUT_CANCEL_UPDATE"})}>Cancel</Button>
-                                :
-                                <Button name={"cancelUpdate"} onClick={() => dispatch({type: "INPUT_RESET"})}>Clear</Button>
-                            }
-                        </Col>
-                    </Row>
-                </div>
-                <Divider orientation="left">Users Table</Divider>
-                <div>
-                    <Table
-                        bordered
-                        dataSource={users}
-                        columns={columns}
-                        rowClassName="editable-row"
-                        />
-                </div>
-            </div>
+            <Divider orientation="left">User Data</Divider>
+            <Form
+                {...layout}
+                form={form}
+                name="control-hooks"
+                onFinish={onFinish}
+            >
+                <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+                    <Input disabled={!!id} />
+                </Form.Item>
+                <Form.Item name="_id" label="ID" noStyle>
+                    <Input type="hidden" />
+                </Form.Item>
+                <Form.Item name="version" label="Version" noStyle>
+                    <Input type="hidden" />
+                </Form.Item>
+                <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+                    <Select
+                        placeholder="Select a role"
+                        allowClear
+                    >
+                        {roles?.map((role: Role) =>
+                            <Option key={role._id} value={role._id}>{role.name}</Option>)
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item {...tailLayout}>
+                    <span>
+                        <Button type="primary" htmlType="submit">
+                            Submit
+                        </Button>
+                        <Button htmlType="button" onClick={onReset}>
+                            Reset
+                        </Button>
+                    </span>
+                </Form.Item>
+            </Form>
+            <Divider orientation="left">Users Table</Divider>
+                <Table
+                    bordered
+                    dataSource={users}
+                    columns={columns}
+                    rowClassName="editable-row"
+                    pagination={{
+                        defaultPageSize: 10,
+                        showSizeChanger: true,
+                        pageSizeOptions: ['10', '20', '30'],
+                        onChange: (page: number, pageSize: number) => {
+                            dispatch({type: "PAGINATION_CHANGED", payload: new State(page, pageSize)})
+                        }
+                }}
+                    />
         </UsersWrapper>
     )
 }
@@ -215,13 +176,13 @@ const UsersWrapper = styled.div`
   }
 `;
 
-const userInputToUser = (input: State, roles: Role[]): User => {
+const userInputToUser = (values: any, roles: Role[]): User => {
     return {
-        _id: input._id,
-        email: input.email,
-        name: input.name,
-        role: roles.filter(e => e._id === input.role),
-        version: input.version,
+        _id: values._id,
+        email: values.email,
+        name: values.name,
+        role: roles.filter(e => e._id === values.role),
+        version: values.version,
         createdBy: undefined,
         createdDate: undefined,
         modifiedBy: undefined,
