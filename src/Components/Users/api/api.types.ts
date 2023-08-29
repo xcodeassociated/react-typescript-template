@@ -23,3 +23,16 @@ export interface User {
     modifiedDate: string | undefined;
 }
 
+export class Page {
+    page: number
+    pageSize: number
+    sort: string
+    direction: string
+
+    constructor(page: number = 0, pageSize: number = 10, sort: string = "id", direction: string = "ASC") {
+        this.page = page
+        this.pageSize = pageSize
+        this.sort = sort
+        this.direction = direction
+    }
+}

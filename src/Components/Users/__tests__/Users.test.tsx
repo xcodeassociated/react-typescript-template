@@ -37,13 +37,16 @@ describe('user component tests', () => {
         // note: mock every possible BE endpoint
         // node.js endpoints
         mock.onGet('http://localhost:4500/permissions').reply(200, mockedRoles);
-        mock.onGet('http://localhost:4500/users').reply(200, mockedUsers);
+        mock.onGet('http://localhost:4500/users?page=0&size=10&sort=id&direction=ASC').reply(200, mockedUsers);
+        mock.onGet('http://localhost:4500/users/size').reply(200, 1);
         // kotlin: coroutine endpoints
         mock.onGet('http://localhost:8080/coroutine/permissions').reply(200, mockedRoles);
-        mock.onGet('http://localhost:8080/coroutine/users').reply(200, mockedUsers);
+        mock.onGet('http://localhost:8080/coroutine/users?page=0&size=10&sort=id&direction=ASC').reply(200, mockedUsers);
+        mock.onGet('http://localhost:8080/coroutine/users/size').reply(200, 1);
         // kotlin: reactive endpoints
         mock.onGet('http://localhost:8080/reactive/permissions').reply(200, mockedRoles);
-        mock.onGet('http://localhost:8080/reactive/users').reply(200, mockedUsers);
+        mock.onGet('http://localhost:8080/reactive/users?page=0&size=10&sort=id&direction=ASC').reply(200, mockedUsers);
+        mock.onGet('http://localhost:8080/reactive/users/size').reply(200, 1);
 
         // eslint-disable-next-line testing-library/no-unnecessary-act
         await act(async () => render(

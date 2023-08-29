@@ -1,5 +1,5 @@
 import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
-import {Role, User} from "./api.types";
+import {Page, Role, User} from "./api.types";
 
 const API_URL = 'http://localhost:8080/coroutine' // jvm api coroutine
 // const API_URL = 'http://localhost:8080/reactive' // jvm api reactive
@@ -14,8 +14,12 @@ const makeConfig = (token: string): AxiosRequestConfig => {
     }
 }
 
-export async function apiGetUsers<T = User[]>(token: string): Promise<AxiosResponse<T, any>> {
-    return axios.get<T>(API_URL + '/users', makeConfig(token))
+export async function apiGetUsers<T = User[]>(token: string, page: Page = new Page()): Promise<AxiosResponse<T, any>> {
+    return axios.get<T>(API_URL + `/users?page=${page.page}&size=${page.pageSize}&sort=${page.sort}&direction=${page.direction}`, makeConfig(token))
+}
+
+export async function apiGetUsersSize<T = number>(token: string): Promise<AxiosResponse<T, any>> {
+    return axios.get<T>(API_URL + '/users/size', makeConfig(token))
 }
 
 export async function apiGetRoles<T = Role[]>(token: string): Promise<AxiosResponse<T, any>> {

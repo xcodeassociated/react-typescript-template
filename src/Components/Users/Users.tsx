@@ -1,26 +1,16 @@
-import React, {useReducer} from "react";
+import React, {useEffect, useReducer, useState} from "react";
 import styled from 'styled-components';
-import {Role, User} from "./api/api.types";
+import {Page, Role, User} from "./api/api.types";
 import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
 import type {ColumnsType} from 'antd/es/table';
 import {Input, Table, Typography, Button, Select, Col, Divider, Row, Form} from 'antd';
 
 
-class State {
-    page: number = 1
-    pageSize: number = 10
-
-    constructor(page: number = 1, pageSize: number = 10) {
-        this.page = page
-        this.pageSize = pageSize
-    }
-}
-
 type Action =
-    | {type: "PAGINATION_CHANGED", payload: State}
+    | {type: "PAGINATION_CHANGED", payload: Page}
 
-function reducer(prevState: State = new State(), action: Action): State {
+function pageReducer(prevState: Page = new Page(), action: Action): Page {
     switch (action.type) {
         case "PAGINATION_CHANGED":
             console.log(`reducer: PAGINATION_CHANGED with: ${JSON.stringify(action.payload)}`)
@@ -29,11 +19,18 @@ function reducer(prevState: State = new State(), action: Action): State {
 }
 
 export const Users: React.FC = () => {
+    const [page, dispatch] = useReducer(pageReducer, new Page())
     const { roles } = useRoles()
-    const { users, createUser, updateUser, deleteUser } = useUsers()
-    const [state, dispatch] = useReducer(reducer, new State())
-    const [form] = Form.useForm();
+    const { users, createUser, updateUser, deleteUser, getUsersSize } = useUsers(page)
+    const [form] = Form.useForm()
     const id = Form.useWatch("_id", form)
+    const [size, setSize] = useState<number>()
+
+    useEffect (() => {
+        getUsersSize()
+            .then(result => setSize(result))
+            .catch(error => console.error(error))
+    }, []);
 
     const handleDeleteUser = async (id: string) => {
         await deleteUser(id)
@@ -160,9 +157,11 @@ export const Users: React.FC = () => {
                     pagination={{
                         defaultPageSize: 10,
                         showSizeChanger: true,
-                        pageSizeOptions: ['10', '20', '30'],
+                        pageSizeOptions: ['5', '10', '100'],
+                        total: size,
                         onChange: (page: number, pageSize: number) => {
-                            dispatch({type: "PAGINATION_CHANGED", payload: new State(page, pageSize)})
+                            const pageIndex = page - 1
+                            dispatch({type: "PAGINATION_CHANGED", payload: new Page(pageIndex, pageSize)})
                         }
                 }}
                     />
