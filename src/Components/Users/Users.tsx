@@ -13,7 +13,6 @@ type Action =
 function pageReducer(prevState: Page = new Page(), action: Action): Page {
     switch (action.type) {
         case "PAGINATION_CHANGED":
-            console.log(`reducer: PAGINATION_CHANGED with: ${JSON.stringify(action.payload)}`)
             return {...prevState, ...action.payload}
     }
 }
@@ -157,7 +156,9 @@ export const Users: React.FC = () => {
             <Divider orientation="left">Users Table</Divider>
             <Table
                 bordered
-                dataSource={users}
+                dataSource={users?.map((e) => {
+                    return {...e, key: e._id}
+                })}
                 columns={columns}
                 rowClassName="editable-row"
                 pagination={{
