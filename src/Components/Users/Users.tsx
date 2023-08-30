@@ -29,37 +29,36 @@ export const Users: React.FC = () => {
         getUsersSize()
             .then(result => setSize(result))
             .catch(error => console.error(error))
-    }, []);
+    }, [])
 
     const handleDeleteUser = async (id: string) => {
         await deleteUser(id)
     }
 
-    const {Option} = Select;
+    const {Option} = Select
 
     const layout = {
         labelCol: {span: 2},
         wrapperCol: {span: 16},
-    };
+    }
 
     const tailLayout = {
         wrapperCol: {offset: 2, span: 16},
-    };
+    }
 
     const onFinish = async (values: any) => {
-        console.log(values);
         if (!values._id) {
             await createUser(userInputToUser(values, roles!!))
-            form.resetFields();
+            form.resetFields()
         } else {
             await updateUser(userInputToUser(values, roles!!))
-            form.resetFields();
+            form.resetFields()
         }
-    };
+    }
 
     const onReset = () => {
-        form.resetFields();
-    };
+        form.resetFields()
+    }
 
     const updateFormValues = (user: User) => {
         form.setFieldsValue({
@@ -68,7 +67,7 @@ export const Users: React.FC = () => {
             role: user.role[0]._id,
             _id: user._id,
             version: user.version
-        });
+        })
     }
 
     const columns: ColumnsType<User> = [
@@ -106,10 +105,10 @@ export const Users: React.FC = () => {
                             Delete
                         </Typography.Link>
                     </span>
-                );
+                )
             },
         },
-    ];
+    ]
 
     return (
         <UsersWrapper>
@@ -180,7 +179,7 @@ const UsersWrapper = styled.div`
   font-size: 32px;
   @media (max-width: 800px) {
   }
-`;
+`
 
 const userInputToUser = (values: any, roles: Role[]): User => {
     return {
