@@ -11,11 +11,11 @@ export const useRoles = () => {
             getRoles()
                 .catch(error => console.error(error))
         }
-    }, []);
+    }, [])
 
     const getRoles = async () => {
         const response = await apiGetRoles(keycloak.token!!)
-        if (response.status === 200){
+        if (response.status === 200) {
             const fetched = response.data
             setRoles([...fetched])
         } else {
@@ -24,10 +24,6 @@ export const useRoles = () => {
     }
 
     return {
-        roles,
-        updateRoles: () => {
-            getRoles()
-                .catch(error => console.error(error))
-        }
+        roles
     }
 }

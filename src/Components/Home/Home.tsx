@@ -1,5 +1,5 @@
 import React from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const HomeWrapper = styled.div`
   font-size: 32px;
@@ -7,7 +7,8 @@ const HomeWrapper = styled.div`
   }
 `;
 
-interface HomeProps {}
+interface HomeProps {
+}
 
 export const Home: React.FC<HomeProps> = () => {
 

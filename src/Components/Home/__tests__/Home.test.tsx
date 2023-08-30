@@ -6,10 +6,10 @@ import {Home} from '../Home';
 test('renders home page component', () => {
     render(
         <BrowserRouter>
-            <Home />
+            <Home/>
         </BrowserRouter>
     );
 
-    const element = screen.getByText(/home page/i);
-    expect(element).toBeInTheDocument();
+    const element = screen.getByText(/home page/i)
+    expect(element).toBeInTheDocument()
 });

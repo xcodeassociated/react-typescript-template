@@ -1,9 +1,8 @@
-import React from 'react';
-import {render, screen} from '@testing-library/react';
+import React from "react";
+import {render, screen} from "@testing-library/react";
 import {BrowserRouter} from "react-router-dom";
-
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
+import axios from "axios";
+import MockAdapter from "axios-mock-adapter";
 import {Users} from "../Users";
 import {act} from "react-dom/test-utils";
 
@@ -33,20 +32,20 @@ const mockedUsers = [
 
 describe('user component tests', () => {
     test('renders users component', async () => {
-        let mock = new MockAdapter(axios);
+        let mock = new MockAdapter(axios)
         // note: mock every possible BE endpoint
         // node.js endpoints
-        mock.onGet('http://localhost:4500/permissions').reply(200, mockedRoles);
-        mock.onGet('http://localhost:4500/users?page=0&size=10&sort=id&direction=ASC').reply(200, mockedUsers);
-        mock.onGet('http://localhost:4500/users/size').reply(200, 1);
+        mock.onGet("http://localhost:4500/permissions").reply(200, mockedRoles)
+        mock.onGet("http://localhost:4500/users?page=0&size=10&sort=id&direction=ASC").reply(200, mockedUsers)
+        mock.onGet("http://localhost:4500/users/size").reply(200, 1)
         // kotlin: coroutine endpoints
-        mock.onGet('http://localhost:8080/coroutine/permissions').reply(200, mockedRoles);
-        mock.onGet('http://localhost:8080/coroutine/users?page=0&size=10&sort=id&direction=ASC').reply(200, mockedUsers);
-        mock.onGet('http://localhost:8080/coroutine/users/size').reply(200, 1);
+        mock.onGet("http://localhost:8080/coroutine/permissions").reply(200, mockedRoles)
+        mock.onGet("http://localhost:8080/coroutine/users?page=0&size=10&sort=id&direction=ASC").reply(200, mockedUsers)
+        mock.onGet("http://localhost:8080/coroutine/users/size").reply(200, 1)
         // kotlin: reactive endpoints
-        mock.onGet('http://localhost:8080/reactive/permissions').reply(200, mockedRoles);
-        mock.onGet('http://localhost:8080/reactive/users?page=0&size=10&sort=id&direction=ASC').reply(200, mockedUsers);
-        mock.onGet('http://localhost:8080/reactive/users/size').reply(200, 1);
+        mock.onGet("http://localhost:8080/reactive/permissions").reply(200, mockedRoles)
+        mock.onGet("http://localhost:8080/reactive/users?page=0&size=10&sort=id&direction=ASC").reply(200, mockedUsers)
+        mock.onGet("http://localhost:8080/reactive/users/size").reply(200, 1)
 
         // eslint-disable-next-line testing-library/no-unnecessary-act
         await act(async () => render(
@@ -55,9 +54,9 @@ describe('user component tests', () => {
                     <Users/>
                 </BrowserRouter>
             </React.StrictMode>
-        ));
+        ))
 
-        expect(screen.getByText(/John Snow/i)).toBeInTheDocument();
-        expect(screen.getByText(/john.snow@email.com/i)).toBeInTheDocument();
-    });
-});
+        expect(screen.getByText(/John Snow/i)).toBeInTheDocument()
+        expect(screen.getByText(/john.snow@email.com/i)).toBeInTheDocument()
+    })
+})

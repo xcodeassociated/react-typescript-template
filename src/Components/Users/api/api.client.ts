@@ -1,4 +1,4 @@
-import axios, {AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios, {AxiosRequestConfig, AxiosResponse} from "axios";
 import {Page, Role, User} from "./api.types";
 
 const API_URL = 'http://localhost:8080/coroutine' // jvm api coroutine
@@ -27,11 +27,21 @@ export async function apiGetRoles<T = Role[]>(token: string): Promise<AxiosRespo
 }
 
 export async function apiPostUser<T = User[]>(token: string, user: User): Promise<AxiosResponse<T, any>> {
-    return axios.post<T>(API_URL + '/users', {name: user.name, email: user.email, role: user.role.map(e => e._id), version: user.version}, makeConfig(token))
+    return axios.post<T>(API_URL + '/users', {
+        name: user.name,
+        email: user.email,
+        role: user.role.map(e => e._id),
+        version: user.version
+    }, makeConfig(token))
 }
 
 export async function apiPutUser<T = User[]>(token: string, user: User): Promise<AxiosResponse<T, any>> {
-    return axios.put<T>(API_URL + '/users/' + user._id, {name: user.name, email: user.email, role: user.role.map(e => e._id), version: user.version}, makeConfig(token))
+    return axios.put<T>(API_URL + '/users/' + user._id, {
+        name: user.name,
+        email: user.email,
+        role: user.role.map(e => e._id),
+        version: user.version
+    }, makeConfig(token))
 }
 
 export async function apiDeleteUser<T = void>(token: string, id: string): Promise<AxiosResponse<T, any>> {

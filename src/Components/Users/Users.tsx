@@ -1,32 +1,32 @@
 import React, {useEffect, useReducer, useState} from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 import {Page, Role, User} from "./api/api.types";
 import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
-import type {ColumnsType} from 'antd/es/table';
-import {Input, Table, Typography, Button, Select, Col, Divider, Row, Form} from 'antd';
+import type {ColumnsType} from "antd/es/table";
+import {Button, Divider, Form, Input, Select, Table, Typography} from "antd";
 
 
 type Action =
-    | {type: "PAGINATION_CHANGED", payload: Page}
+    | { type: "PAGINATION_CHANGED", payload: Page }
 
 function pageReducer(prevState: Page = new Page(), action: Action): Page {
     switch (action.type) {
         case "PAGINATION_CHANGED":
             console.log(`reducer: PAGINATION_CHANGED with: ${JSON.stringify(action.payload)}`)
-            return { ...prevState, ...action.payload }
+            return {...prevState, ...action.payload}
     }
 }
 
 export const Users: React.FC = () => {
     const [page, dispatch] = useReducer(pageReducer, new Page())
-    const { roles } = useRoles()
-    const { users, createUser, updateUser, deleteUser, getUsersSize } = useUsers(page)
+    const {roles} = useRoles()
+    const {users, createUser, updateUser, deleteUser, getUsersSize} = useUsers(page)
     const [form] = Form.useForm()
     const id = Form.useWatch("_id", form)
     const [size, setSize] = useState<number>()
 
-    useEffect (() => {
+    useEffect(() => {
         getUsersSize()
             .then(result => setSize(result))
             .catch(error => console.error(error))
@@ -36,15 +36,15 @@ export const Users: React.FC = () => {
         await deleteUser(id)
     }
 
-    const { Option } = Select;
+    const {Option} = Select;
 
     const layout = {
-        labelCol: { span: 2 },
-        wrapperCol: { span: 16 },
+        labelCol: {span: 2},
+        wrapperCol: {span: 16},
     };
 
     const tailLayout = {
-        wrapperCol: { offset: 2, span: 16 },
+        wrapperCol: {offset: 2, span: 16},
     };
 
     const onFinish = async (values: any) => {
@@ -63,7 +63,13 @@ export const Users: React.FC = () => {
     };
 
     const updateFormValues = (user: User) => {
-        form.setFieldsValue({ name: user.name, email: user.email, role: user.role[0]._id, _id: user._id, version: user.version });
+        form.setFieldsValue({
+            name: user.name,
+            email: user.email,
+            role: user.role[0]._id,
+            _id: user._id,
+            version: user.version
+        });
     }
 
     const columns: ColumnsType<User> = [
@@ -96,7 +102,7 @@ export const Users: React.FC = () => {
                         <Typography.Link onClick={() => updateFormValues(user)}>
                             Update
                         </Typography.Link>
-                        <br />
+                        <br/>
                         <Typography.Link onClick={() => handleDeleteUser(user._id!!)}>
                             Delete
                         </Typography.Link>
@@ -115,19 +121,19 @@ export const Users: React.FC = () => {
                 name="control-hooks"
                 onFinish={onFinish}
             >
-                <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-                    <Input />
+                <Form.Item name="name" label="Name" rules={[{required: true}]}>
+                    <Input/>
                 </Form.Item>
-                <Form.Item name="email" label="Email" rules={[{ required: true }]}>
-                    <Input disabled={!!id} />
+                <Form.Item name="email" label="Email" rules={[{required: true}]}>
+                    <Input disabled={!!id}/>
                 </Form.Item>
                 <Form.Item name="_id" label="ID" noStyle>
-                    <Input type="hidden" />
+                    <Input type="hidden"/>
                 </Form.Item>
                 <Form.Item name="version" label="Version" noStyle>
-                    <Input type="hidden" />
+                    <Input type="hidden"/>
                 </Form.Item>
-                <Form.Item name="role" label="Role" rules={[{ required: true }]}>
+                <Form.Item name="role" label="Role" rules={[{required: true}]}>
                     <Select
                         placeholder="Select a role"
                         allowClear
@@ -149,22 +155,22 @@ export const Users: React.FC = () => {
                 </Form.Item>
             </Form>
             <Divider orientation="left">Users Table</Divider>
-                <Table
-                    bordered
-                    dataSource={users}
-                    columns={columns}
-                    rowClassName="editable-row"
-                    pagination={{
-                        defaultPageSize: 10,
-                        showSizeChanger: true,
-                        pageSizeOptions: ['5', '10', '100'],
-                        total: size,
-                        onChange: (page: number, pageSize: number) => {
-                            const pageIndex = page - 1
-                            dispatch({type: "PAGINATION_CHANGED", payload: new Page(pageIndex, pageSize)})
-                        }
+            <Table
+                bordered
+                dataSource={users}
+                columns={columns}
+                rowClassName="editable-row"
+                pagination={{
+                    defaultPageSize: 10,
+                    showSizeChanger: true,
+                    pageSizeOptions: ['5', '10', '100'],
+                    total: size,
+                    onChange: (page: number, pageSize: number) => {
+                        const pageIndex = page - 1
+                        dispatch({type: "PAGINATION_CHANGED", payload: new Page(pageIndex, pageSize)})
+                    }
                 }}
-                    />
+            />
         </UsersWrapper>
     )
 }
