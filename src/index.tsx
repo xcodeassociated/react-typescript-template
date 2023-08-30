@@ -22,7 +22,8 @@ const onKeycloakEvent = (event: AuthClientEvent, error?: AuthClientError): void 
 }
 
 const onKeycloakTokens = (tokens: AuthClientTokens): void => {
-    console.info("Keycloak token: " + JSON.stringify(tokens))
+    // handle keycloak token
+    // console.info("Keycloak token: " + JSON.stringify(tokens))
 }
 
 root.render(
