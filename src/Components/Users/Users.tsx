@@ -7,6 +7,17 @@ import type {ColumnsType} from "antd/es/table";
 import {Button, Divider, Form, Input, Select, Table, Typography} from "antd";
 
 
+const {Option} = Select
+
+const layout = {
+    labelCol: {span: 2},
+    wrapperCol: {span: 16},
+}
+
+const tailLayout = {
+    wrapperCol: {offset: 2, span: 16},
+}
+
 type Action =
     | { type: "PAGINATION_CHANGED", payload: Page }
 
@@ -33,17 +44,6 @@ export const Users: React.FC = () => {
 
     const handleDeleteUser = async (id: string) => {
         await deleteUser(id)
-    }
-
-    const {Option} = Select
-
-    const layout = {
-        labelCol: {span: 2},
-        wrapperCol: {span: 16},
-    }
-
-    const tailLayout = {
-        wrapperCol: {offset: 2, span: 16},
     }
 
     const onFinish = async (values: any) => {
