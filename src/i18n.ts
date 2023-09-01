@@ -21,7 +21,7 @@ i18next
     .use(initReactI18next)
     .init({
         resources,
-        debug: true,
+        debug: false,
         lng: 'en',
         react: {
             bindI18n: 'loaded languageChanged',

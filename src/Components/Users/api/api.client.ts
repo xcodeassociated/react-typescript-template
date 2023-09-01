@@ -19,7 +19,7 @@ export async function apiGetUsers<T = User[]>(token: string, page: Page = new Pa
 }
 
 export async function apiGetUsersSize<T = number>(token: string): Promise<AxiosResponse<T, any>> {
-    return axios.get<T>(API_URL + '/users/size', makeConfig(token))
+    return axios.get<T>(API_URL + '/usersCount', makeConfig(token))
 }
 
 export async function apiGetRoles<T = Role[]>(token: string): Promise<AxiosResponse<T, any>> {

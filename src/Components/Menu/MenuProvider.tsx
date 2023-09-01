@@ -83,7 +83,6 @@ export const MenuProvider: React.FC = () => {
     const globalSettings = useContext(GlobalSettingsContext)
 
     useEffect(() => {
-        console.log(keycloak.authenticated)
         const filteredItems = menuItems
             .filter(e => e.access.showAfterLogin === keycloak.authenticated)
         setItems(filteredItems)
