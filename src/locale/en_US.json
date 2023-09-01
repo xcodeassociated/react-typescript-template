@@ -1,0 +1,28 @@
+{
+  "menu": {
+    "home": "Home",
+    "users": "Users",
+    "counter": "Counter",
+    "login": "Login",
+    "logout": "Logout"
+  },
+  "users": {
+    "t1": "User Data",
+    "t2": "Users Table",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "actions": "Actions",
+    "submit": "Submit",
+    "reset": "Reset",
+    "update": "Update",
+    "delete": "Delete"
+  },
+  "general": {
+    "darkMode": "Dark Mode"
+  },
+  "home": {
+    "title": "React Typescript Learning",
+    "details": "The app was build for the learning reasons of FE. Mainly to teach my loved wife: Justysia"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "menu": {
+    "home": "Strona Główna",
+    "users": "Użytkownicy",
+    "counter": "Licznik",
+    "login": "Zaloguj się",
+    "logout": "Wyloguj się"
+  },
+  "users": {
+    "t1": "Dane Użytkownika",
+    "t2": "Tabela Użytkowników",
+    "name": "Imię",
+    "email": "Email",
+    "role": "Rola",
+    "actions": "Akcje",
+    "submit": "Wyślij",
+    "reset": "Resetuj",
+    "update": "Aktualizuj",
+    "delete": "Usuń"
+  },
+  "general": {
+    "darkMode": "Ciemny Motyw"
+  },
+  "home": {
+    "title": "React Typescript Learning",
+    "details": "Ta aplikacja powstała z myślą o nauce FE. W szczególności mojej ukochanej żony: Justysi"
+  }
+}

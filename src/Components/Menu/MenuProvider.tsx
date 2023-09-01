@@ -1,11 +1,14 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useKeycloak} from "@react-keycloak/web";
-import {LaptopOutlined, UserOutlined} from '@ant-design/icons';
+import {HomeOutlined, LaptopOutlined, UserOutlined} from '@ant-design/icons';
 import {Menu} from "antd";
 import {LoginOutlined, LogoutOutlined} from "@ant-design/icons/lib/icons";
+import {useTranslation} from "react-i18next";
+import {GlobalSettingsContext} from "../App/App";
 
 enum MenuEntry {
+    HOME,
     USERS,
     COUNTER,
     LOGIN,
@@ -22,10 +25,18 @@ type MenuItem = {
     readonly access: MenuItemAccess
     readonly key: string
     readonly icon: any
-    readonly label: string
 }
 
 const menuItems: MenuItem[] = [
+    {
+        type: MenuEntry.HOME,
+        access: {
+            public: true,
+            showAfterLogin: true
+        },
+        key: "home",
+        icon: HomeOutlined,
+    },
     {
         type: MenuEntry.USERS,
         access: {
@@ -34,7 +45,6 @@ const menuItems: MenuItem[] = [
         },
         key: "users",
         icon: UserOutlined,
-        label: "Users"
     },
     {
         type: MenuEntry.COUNTER,
@@ -44,7 +54,6 @@ const menuItems: MenuItem[] = [
         },
         key: "counter",
         icon: LaptopOutlined,
-        label: "Counter"
     },
     {
         type: MenuEntry.LOGOUT,
@@ -54,7 +63,6 @@ const menuItems: MenuItem[] = [
         },
         key: "logout",
         icon: LogoutOutlined,
-        label: "Logout"
     },
     {
         type: MenuEntry.LOGIN,
@@ -64,7 +72,6 @@ const menuItems: MenuItem[] = [
         },
         key: "login",
         icon: LoginOutlined,
-        label: "Login"
     },
 ]
 
@@ -72,12 +79,19 @@ export const MenuProvider: React.FC = () => {
     const [items, setItems] = useState<MenuItem[]>([])
     const {keycloak} = useKeycloak()
     const navigate = useNavigate()
+    const {t} = useTranslation(['main'])
+    const globalSettings = useContext(GlobalSettingsContext)
 
     useEffect(() => {
+        console.log(keycloak.authenticated)
         const filteredItems = menuItems
             .filter(e => e.access.showAfterLogin === keycloak.authenticated)
         setItems(filteredItems)
-    }, []);
+    }, [])
+
+    useEffect(() => {
+        console.log(`MenuProvider: ${JSON.stringify(globalSettings)}`)
+    }, [globalSettings])
 
     return (
         <Menu
@@ -89,13 +103,16 @@ export const MenuProvider: React.FC = () => {
                     return {
                         key: `${e.key}`,
                         icon: React.createElement(e.icon),
-                        label: `${e.label}`
+                        label: `${t(`menu.${e.key}`, {ns: ['main']})}`
                     }
                 },
             )}
             onClick={(selected) => {
                 const item = items.find(e => e.key === selected.key)!!
                 switch (item.type) {
+                    case MenuEntry.HOME:
+                        navigate('/')
+                        break;
                     case MenuEntry.LOGOUT:
                         keycloak.logout()
                             .then(r => {

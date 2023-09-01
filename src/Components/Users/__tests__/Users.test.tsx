@@ -5,6 +5,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import {Users} from "../Users";
 import {act} from "react-dom/test-utils";
+import {GlobalSettingsContext} from "../../App/App";
 
 
 const mockedRoles = [
@@ -50,9 +51,11 @@ describe('user component tests', () => {
         // eslint-disable-next-line testing-library/no-unnecessary-act
         await act(async () => render(
             <React.StrictMode>
-                <BrowserRouter>
-                    <Users/>
-                </BrowserRouter>
+                <GlobalSettingsContext.Provider value={{theme: {isDark: false}}}>
+                    <BrowserRouter>
+                        <Users/>
+                    </BrowserRouter>
+                </GlobalSettingsContext.Provider>
             </React.StrictMode>
         ))
 

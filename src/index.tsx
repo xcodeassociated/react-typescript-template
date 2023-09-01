@@ -11,6 +11,8 @@ import {ReactKeycloakProvider} from "@react-keycloak/web"
 import {AuthClientError, AuthClientEvent} from "@react-keycloak/core/lib/types";
 import {AuthClientTokens} from "@react-keycloak/core";
 import {BrowserRouter} from "react-router-dom";
+import './i18n'
+
 
 const container = document.getElementById("root")!
 const root = createRoot(container)
@@ -23,7 +25,7 @@ const onKeycloakEvent = (event: AuthClientEvent, error?: AuthClientError): void 
 
 const onKeycloakTokens = (tokens: AuthClientTokens): void => {
     // handle keycloak token
-    // console.info("Keycloak token: " + JSON.stringify(tokens))
+    console.info("Keycloak token: " + JSON.stringify(tokens))
 }
 
 root.render(
@@ -39,7 +41,7 @@ root.render(
             </Provider>
         </React.StrictMode>
     </ReactKeycloakProvider>
-);
+)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

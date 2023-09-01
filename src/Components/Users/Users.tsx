@@ -1,10 +1,12 @@
-import React, {useEffect, useReducer, useState} from "react";
+import React, {useContext, useEffect, useReducer, useState} from "react";
 import styled from "styled-components";
 import {Page, Role, User} from "./api/api.types";
 import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
 import type {ColumnsType} from "antd/es/table";
-import {Button, Divider, Form, Input, Select, Table, Typography} from "antd";
+import {Button, Divider, Form, Input, Select, Space, Table, Typography} from "antd";
+import {useTranslation} from "react-i18next";
+import {GlobalSettingsContext} from "../App/App";
 
 
 const {Option} = Select
@@ -35,12 +37,18 @@ export const Users: React.FC = () => {
     const [form] = Form.useForm()
     const id = Form.useWatch("_id", form)
     const [size, setSize] = useState<number>()
+    const globalSettings = useContext(GlobalSettingsContext)
+    const {t} = useTranslation(['main']);
 
     useEffect(() => {
         getUsersSize()
             .then(result => setSize(result))
             .catch(error => console.error(error))
     }, [])
+
+    useEffect(() => {
+        console.log(`Users: ${JSON.stringify(globalSettings)}`)
+    }, [globalSettings])
 
     const handleDeleteUser = async (id: string) => {
         await deleteUser(id)
@@ -72,19 +80,19 @@ export const Users: React.FC = () => {
 
     const columns: ColumnsType<User> = [
         {
-            title: 'Name',
+            title: `${t(`users.name`, {ns: ['main']})}`,
             dataIndex: 'name',
             key: '_id',
             width: '20%',
         },
         {
-            title: 'Email',
+            title: `${t(`users.email`, {ns: ['main']})}`,
             dataIndex: 'email',
             width: '30%',
         },
         {
-            title: 'Role',
-            dataIndex: 'role',
+            title: `${t(`users.role`, {ns: ['main']})}`,
+            dataIndex: 'users.role',
             render: (_: any, user: User) => {
                 return (
                     user.role.map((role: Role) => role.name)
@@ -92,17 +100,17 @@ export const Users: React.FC = () => {
             }
         },
         {
-            title: 'operation',
+            title: 'users.actions',
             dataIndex: 'operation',
             render: (_: any, user: User) => {
                 return (
                     <span>
                         <Typography.Link onClick={() => updateFormValues(user)}>
-                            Update
+                            {t(`users.update`, {ns: ['main']})}
                         </Typography.Link>
                         <br/>
                         <Typography.Link onClick={() => handleDeleteUser(user._id!!)}>
-                            Delete
+                            {t(`users.delete`, {ns: ['main']})}
                         </Typography.Link>
                     </span>
                 )
@@ -112,17 +120,17 @@ export const Users: React.FC = () => {
 
     return (
         <UsersWrapper>
-            <Divider orientation="left">User Data</Divider>
+            <Divider orientation="left">{`${t(`users.t1`, {ns: ['main']})}`}</Divider>
             <Form
                 {...layout}
                 form={form}
                 name="control-hooks"
                 onFinish={onFinish}
             >
-                <Form.Item name="name" label="Name" rules={[{required: true}]}>
+                <Form.Item name="name" label={`${t(`users.name`, {ns: ['main']})}`} rules={[{required: true}]}>
                     <Input/>
                 </Form.Item>
-                <Form.Item name="email" label="Email" rules={[{required: true}]}>
+                <Form.Item name="email" label={`${t(`users.email`, {ns: ['main']})}`} rules={[{required: true}]}>
                     <Input disabled={!!id}/>
                 </Form.Item>
                 <Form.Item name="_id" label="ID" noStyle>
@@ -131,7 +139,7 @@ export const Users: React.FC = () => {
                 <Form.Item name="version" label="Version" noStyle>
                     <Input type="hidden"/>
                 </Form.Item>
-                <Form.Item name="role" label="Role" rules={[{required: true}]}>
+                <Form.Item name="role" label={`${t(`users.role`, {ns: ['main']})}`} rules={[{required: true}]}>
                     <Select
                         placeholder="Select a role"
                         allowClear
@@ -142,23 +150,25 @@ export const Users: React.FC = () => {
                     </Select>
                 </Form.Item>
                 <Form.Item {...tailLayout}>
-                    <span>
+                    <Space size={"small"}>
                         <Button type="primary" htmlType="submit">
-                            Submit
+                            {`${t(`users.submit`, {ns: ['main']})}`}
                         </Button>
                         <Button htmlType="button" onClick={onReset}>
-                            Reset
+                            {`${t(`users.reset`, {ns: ['main']})}`}
                         </Button>
-                    </span>
+                    </Space>
                 </Form.Item>
             </Form>
-            <Divider orientation="left">Users Table</Divider>
+            <Divider orientation="left">{`${t(`users.t2`, {ns: ['main']})}`}</Divider>
             <Table
                 bordered
                 dataSource={users?.map((e) => {
                     return {...e, key: e._id}
                 })}
-                columns={columns}
+                columns={columns.map(column => {
+                    return {...column, title: `${t(column.title, {ns: ['main']})}`}
+                })}
                 rowClassName="editable-row"
                 pagination={{
                     defaultPageSize: 10,
