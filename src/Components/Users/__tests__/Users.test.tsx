@@ -6,15 +6,34 @@ import MockAdapter from "axios-mock-adapter";
 import {Users} from "../Users";
 import {act} from "react-dom/test-utils";
 import {GlobalSettingsContext} from "../../App/App";
+import {MockedProvider} from "@apollo/client/testing";
+import {ROLE_QUERY} from "../hooks/useRolesGraphql";
+import "../../../i18n"
 
+// const mockedRoles = [
+//     {
+//         "description": "Anonymous user who can only read info",
+//         "_id": "63c16ce71ba30e5f08b4d66e",
+//         "name": "GUEST"
+//     }
+// ]
 
-const mockedRoles = [
-    {
-        "description": "Anonymous user who can only read info",
-        "_id": "63c16ce71ba30e5f08b4d66e",
-        "name": "GUEST"
+const mockedRolesGql = {
+    request: {
+        query: ROLE_QUERY,
+        variables: {
+            page: 0,
+            size: 10,
+            sort: "id",
+            direction: "ASC"
+        }
+    },
+
+    result: {
+        data: { getAllPermissions: [{ id: "63c16ce71ba30e5f08b4d66e", name: "GUEST" }] }
     }
-]
+
+};
 
 const mockedUsers = [
     {
@@ -36,24 +55,29 @@ describe('user component tests', () => {
         let mock = new MockAdapter(axios)
         // note: mock every possible BE endpoint
         // node.js endpoints
-        mock.onGet("http://localhost:4500/permissions").reply(200, mockedRoles)
         mock.onGet("http://localhost:4500/users?page=0&size=10&sort=id&direction=ASC").reply(200, mockedUsers)
-        mock.onGet("http://localhost:4500/users/size").reply(200, 1)
+        mock.onGet("http://localhost:4500/usersCount").reply(200, 1)
         // kotlin: coroutine endpoints
-        mock.onGet("http://localhost:8080/coroutine/permissions").reply(200, mockedRoles)
         mock.onGet("http://localhost:8080/coroutine/users?page=0&size=10&sort=id&direction=ASC").reply(200, mockedUsers)
-        mock.onGet("http://localhost:8080/coroutine/users/size").reply(200, 1)
+        mock.onGet("http://localhost:8080/coroutine/usersCount").reply(200, 1)
         // kotlin: reactive endpoints
-        mock.onGet("http://localhost:8080/reactive/permissions").reply(200, mockedRoles)
         mock.onGet("http://localhost:8080/reactive/users?page=0&size=10&sort=id&direction=ASC").reply(200, mockedUsers)
-        mock.onGet("http://localhost:8080/reactive/users/size").reply(200, 1)
+        mock.onGet("http://localhost:8080/reactive/usersCount").reply(200, 1)
+
+        // non-graphql
+        // mock.onGet("http://localhost:4500/permissions").reply(200, mockedRoles)
+        // mock.onGet("http://localhost:8080/coroutine/permissions").reply(200, mockedRoles)
+        // mock.onGet("http://localhost:8080/reactive/permissions").reply(200, mockedRoles)
+
 
         // eslint-disable-next-line testing-library/no-unnecessary-act
         await act(async () => render(
             <React.StrictMode>
                 <GlobalSettingsContext.Provider value={{theme: {isDark: false}}}>
                     <BrowserRouter>
-                        <Users/>
+                        <MockedProvider mocks={[mockedRolesGql]} addTypename={false}>
+                            <Users/>
+                        </MockedProvider>
                     </BrowserRouter>
                 </GlobalSettingsContext.Provider>
             </React.StrictMode>
@@ -61,5 +85,6 @@ describe('user component tests', () => {
 
         expect(screen.getByText(/John Snow/i)).toBeInTheDocument()
         expect(screen.getByText(/john.snow@email.com/i)).toBeInTheDocument()
+        expect(screen.getByText(/GUEST/i)).toBeInTheDocument()
     })
 })

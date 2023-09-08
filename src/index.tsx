@@ -12,6 +12,8 @@ import {AuthClientError, AuthClientEvent} from "@react-keycloak/core/lib/types";
 import {AuthClientTokens} from "@react-keycloak/core";
 import {BrowserRouter} from "react-router-dom";
 import './i18n'
+import {ApolloClient, ApolloProvider, createHttpLink, InMemoryCache} from "@apollo/client";
+import {setContext} from "@apollo/client/link/context";
 
 
 const container = document.getElementById("root")!
@@ -28,6 +30,25 @@ const onKeycloakTokens = (tokens: AuthClientTokens): void => {
     // console.info("Keycloak token: " + JSON.stringify(tokens))
 }
 
+const httpLink = createHttpLink({
+    uri: 'http://localhost:8080/graphql',
+})
+
+const authLink = setContext((_, { headers }) => {
+    const token = keycloak.token
+    return {
+        headers: {
+            ...headers,
+            authorization: token ? `Bearer ${token}` : "",
+        }
+    }
+})
+
+const client = new ApolloClient({
+    link: authLink.concat(httpLink),
+    cache: new InMemoryCache(),
+})
+
 root.render(
     <ReactKeycloakProvider authClient={keycloak} onEvent={onKeycloakEvent} onTokens={onKeycloakTokens}
                            initOptions={{onLoad: "check-sso", redirectUri: "http://localhost:3000/"}}>
@@ -35,7 +56,9 @@ root.render(
             <Provider store={store}>
                 <PersistGate loading={null} persistor={persistor}>
                     <BrowserRouter>
-                        <App/>
+                        <ApolloProvider client={client}>
+                            <App/>
+                        </ApolloProvider>
                     </BrowserRouter>
                 </PersistGate>
             </Provider>

@@ -1,12 +1,12 @@
 import React, {useContext, useEffect, useReducer, useState} from "react";
 import styled from "styled-components";
 import {Page, Role, User} from "./api/api.types";
-import {useRoles} from "./hooks/useRoles";
 import {useUsers} from "./hooks/useUsers";
 import type {ColumnsType} from "antd/es/table";
 import {Button, Divider, Form, Input, Select, Space, Table, Typography} from "antd";
 import {useTranslation} from "react-i18next";
 import {GlobalSettingsContext} from "../App/App";
+import {useRolesGraphql} from "./hooks/useRolesGraphql";
 
 
 const {Option} = Select
@@ -32,7 +32,7 @@ function pageReducer(prevState: Page = new Page(), action: Action): Page {
 
 export const Users: React.FC = () => {
     const [page, dispatch] = useReducer(pageReducer, new Page())
-    const {roles} = useRoles()
+    const {roles} = useRolesGraphql()
     const {users, createUser, updateUser, deleteUser, getUsersSize} = useUsers(page)
     const [form] = Form.useForm()
     const id = Form.useWatch("_id", form)

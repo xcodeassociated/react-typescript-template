@@ -6,6 +6,7 @@ import App from '../App';
 import keycloak from "../../../Keycloak/keycloak";
 import {ReactKeycloakProvider} from '@react-keycloak/web'
 import {PersistGate} from 'redux-persist/integration/react'
+import "../../../i18n"
 
 test('renders learn react link', () => {
     const {getByText} = render(
