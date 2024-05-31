@@ -47,7 +47,7 @@ export const Users: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        console.log(`Users: ${JSON.stringify(globalSettings)}`)
+        console.debug(`Users: ${JSON.stringify(globalSettings)}`)
     }, [globalSettings])
 
     const handleDeleteUser = async (id: string) => {

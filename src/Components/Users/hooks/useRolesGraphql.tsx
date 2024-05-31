@@ -40,7 +40,7 @@ export const useRolesGraphql = () => {
         }
 
         if (loading) {
-            console.log("apollo: waiting for data...")
+            console.debug("apollo: waiting for data...")
         }
 
         if (data) {

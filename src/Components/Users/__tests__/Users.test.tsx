@@ -1,10 +1,9 @@
-import React from "react";
+import React, {act} from "react";
 import {render, screen} from "@testing-library/react";
 import {BrowserRouter} from "react-router-dom";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import {Users} from "../Users";
-import {act} from "react-dom/test-utils";
 import {GlobalSettingsContext} from "../../App/App";
 import {MockedProvider} from "@apollo/client/testing";
 import {ROLE_QUERY} from "../hooks/useRolesGraphql";
