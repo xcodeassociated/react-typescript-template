@@ -24,7 +24,10 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      
+
+    - name: Codegen
+      run: npm run generate:graphql
+
     - name: Run the tests
       run: npm test
 

@@ -6,8 +6,8 @@ import MockAdapter from "axios-mock-adapter";
 import {Users} from "../Users";
 import {GlobalSettingsContext} from "../../App/App";
 import {MockedProvider} from "@apollo/client/testing";
-import {ROLE_QUERY} from "../hooks/useRolesGraphql";
 import "../../../i18n"
+import {GetAllPermissionsDocument} from "../../../graphql/generated";
 
 // const mockedRoles = [
 //     {
@@ -19,7 +19,7 @@ import "../../../i18n"
 
 const mockedRolesGql = {
     request: {
-        query: ROLE_QUERY,
+        query: GetAllPermissionsDocument,
         variables: {
             page: 0,
             size: 10,

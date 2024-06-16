@@ -1,25 +1,10 @@
 import {useEffect, useState} from "react";
 import {Role} from "../api/api.types";
-import {gql, useQuery} from '@apollo/client';
-
-
-export const ROLE_QUERY = gql`
-    query getAllPermissions($page: Int, $size: Int, $sort:String, $direction: String) {
-        getAllPermissions(page: $page, size: $size, sort: $sort, direction: $direction) {
-            id,
-            name
-        }
-    }
-`
-
-interface RoleDto {
-    readonly id: string,
-    name: string
-}
+import {useGetAllPermissionsQuery} from "../../../graphql/generated";
 
 export const useRolesGraphql = () => {
     const [roles, setRoles] = useState<Role[]>()
-    const {loading, error, data} = useQuery(ROLE_QUERY, {
+    const {loading, error, data} = useGetAllPermissionsQuery({
         variables: {
             page: 0,
             size: 10,
@@ -44,13 +29,13 @@ export const useRolesGraphql = () => {
         }
 
         if (data) {
-            const permissions: Role[] = data.getAllPermissions.map((e: RoleDto) => {
+            const permissions: Role[] | undefined = data.getAllPermissions?.map((e) => {
                 return {
-                    _id: e.id,
-                    name: e.name
+                    _id: e?.id,
+                    name: e?.name
                 } as Role
             })
-            setRoles([...permissions])
+            setRoles([...permissions!!])
         }
     }
 
