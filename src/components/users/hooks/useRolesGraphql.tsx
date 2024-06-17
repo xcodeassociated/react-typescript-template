@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {Role} from "../api/usersApi.types";
-import {useGetAllPermissionsQuery} from "../../../graphql/generated";
+import {useEffect, useState} from "react"
+import {Role} from "../api/usersApi.types"
+import {useGetAllPermissionsQuery} from "../../../graphql/generated"
 
 export const useRolesGraphql = () => {
     const [roles, setRoles] = useState<Role[]>()

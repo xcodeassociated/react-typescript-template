@@ -1,7 +1,7 @@
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react'
 import type {User} from "./usersApi.types"
 import keycloak from "../../../keycloak/keycloak"
-import {PayloadAction} from "@reduxjs/toolkit";
+import {PayloadAction} from "@reduxjs/toolkit"
 
 const parse = (data: User) => {
     return {

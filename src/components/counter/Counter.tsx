@@ -1,7 +1,7 @@
-import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../store/hooks";
-import {decrement, increment, incrementAsync, incrementByAmount, incrementIfOdd, selectCount,} from "./counterSlice";
-import styles from "./Counter.module.css";
+import React, {useState} from "react"
+import {useAppDispatch, useAppSelector} from "../../store/hooks"
+import {decrement, increment, incrementAsync, incrementByAmount, incrementIfOdd, selectCount,} from "./counterSlice"
+import styles from "./Counter.module.css"
 
 export const Counter: React.FC = () => {
     const count = useAppSelector(selectCount)

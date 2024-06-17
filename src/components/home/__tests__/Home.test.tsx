@@ -1,8 +1,8 @@
-import React from 'react';
-import {render, screen} from '@testing-library/react';
-import {BrowserRouter} from "react-router-dom";
-import {Home} from '../Home';
-import {GlobalSettingsContext} from '../../app/App';
+import React from 'react'
+import {render, screen} from '@testing-library/react'
+import {BrowserRouter} from "react-router-dom"
+import {Home} from '../Home'
+import {GlobalSettingsContext} from '../../app/App'
 import "../../../i18n"
 
 test('renders home page component', () => {
@@ -17,4 +17,4 @@ test('renders home page component', () => {
 
     const element = screen.getByText(/React Typescript Learning/i)
     expect(element).toBeInTheDocument()
-});
+})

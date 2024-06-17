@@ -1,7 +1,7 @@
-import i18next from "i18next";
-import {initReactI18next} from "react-i18next";
-import translationEnglish from "./locale/en_US.json";
-import translationPolish from "./locale/pl_PL.json";
+import i18next from "i18next"
+import {initReactI18next} from "react-i18next"
+import translationEnglish from "./locale/en_US.json"
+import translationPolish from "./locale/pl_PL.json"
 
 
 export type Language = {

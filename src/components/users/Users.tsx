@@ -1,18 +1,18 @@
-import React, {useContext, useEffect, useReducer, useState} from "react";
-import styled from "styled-components";
-import {Page, Role, User} from "./api/usersApi.types";
-import type {ColumnsType} from "antd/es/table";
-import {Button, Divider, Form, Input, Select, Space, Table, Typography} from "antd";
-import {useTranslation} from "react-i18next";
-import {GlobalSettingsContext} from "../app/App";
-import {useRolesGraphql} from "./hooks/useRolesGraphql";
+import React, {useContext, useEffect, useReducer, useState} from "react"
+import styled from "styled-components"
+import {Page, Role, User} from "./api/usersApi.types"
+import type {ColumnsType} from "antd/es/table"
+import {Button, Divider, Form, Input, Select, Space, Table, Typography} from "antd"
+import {useTranslation} from "react-i18next"
+import {GlobalSettingsContext} from "../app/App"
+import {useRolesGraphql} from "./hooks/useRolesGraphql"
 import {
     useCreateUserMutation,
     useDeleteUserMutation,
     useGetAllUsersQuery,
     useGetUsersSizeQuery, useUpdateUserMutation
-} from "./api/usersApi";
-import {PayloadAction} from "@reduxjs/toolkit";
+} from "./api/usersApi"
+import {PayloadAction} from "@reduxjs/toolkit"
 
 
 const {Option} = Select
@@ -64,7 +64,7 @@ export const Users: React.FC = () => {
     const [deleteUser] = useDeleteUserMutation()
     const [form] = Form.useForm()
     const id = Form.useWatch("_id", form)
-    const {t} = useTranslation(['main']);
+    const {t} = useTranslation(['main'])
     const globalSettings = useContext(GlobalSettingsContext)
 
     const handleDeleteUser = async (id: string) => {

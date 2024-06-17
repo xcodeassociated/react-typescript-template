@@ -1,11 +1,11 @@
-import React from "react";
-import {Select} from "antd";
-import {Error} from "../../error/Error";
-import {useTranslation} from "react-i18next";
+import React from "react"
+import {Select} from "antd"
+import {Error} from "../../error/Error"
+import {useTranslation} from "react-i18next"
 
 
 export const LanguageSelector: React.FC = () => {
-    const {t, i18n} = useTranslation(['main']);
+    const {t, i18n} = useTranslation(['main'])
 
 
     const changeLanguage = (selected: string) => {

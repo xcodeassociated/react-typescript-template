@@ -1,15 +1,15 @@
-import React, {createContext, useState} from "react";
-import {Counter} from "../counter/Counter";
-import {useKeycloak} from "@react-keycloak/web";
-import {Navigate, Route, Routes} from "react-router-dom";
+import React, {createContext, useState} from "react"
+import {Counter} from "../counter/Counter"
+import {useKeycloak} from "@react-keycloak/web"
+import {Navigate, Route, Routes} from "react-router-dom"
 import {Home} from "../home/Home"
-import {Error, Unauthorized} from "../error/Error";
-import {MenuProvider} from "../menu/MenuProvider";
-import {Users} from "../users/Users";
-import {Button, ConfigProvider, Layout, Space, Switch, theme} from "antd";
-import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons';
-import {LanguageSelector} from "./sub/LanguageSelector";
-import {useTranslation} from "react-i18next";
+import {Error, Unauthorized} from "../error/Error"
+import {MenuProvider} from "../menu/MenuProvider"
+import {Users} from "../users/Users"
+import {Button, ConfigProvider, Layout, Space, Switch, theme} from "antd"
+import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons'
+import {LanguageSelector} from "./sub/LanguageSelector"
+import {useTranslation} from "react-i18next"
 
 
 const {Header, Content, Footer, Sider} = Layout
@@ -35,10 +35,10 @@ export const GlobalSettingsContext = createContext<GlobalSettings>(defaultGlobal
 
 const App: React.FC = () => {
     const {initialized, keycloak} = useKeycloak()
-    const [collapsed, setCollapsed] = useState(false);
-    const {token: {colorBgContainer}} = theme.useToken();
-    const {defaultAlgorithm, darkAlgorithm} = theme;
-    const {t} = useTranslation(['main']);
+    const [collapsed, setCollapsed] = useState(false)
+    const {token: {colorBgContainer}} = theme.useToken()
+    const {defaultAlgorithm, darkAlgorithm} = theme
+    const {t} = useTranslation(['main'])
     const [darkMode, setDarkMode] = useState<boolean>(false)
 
     if (!initialized) {

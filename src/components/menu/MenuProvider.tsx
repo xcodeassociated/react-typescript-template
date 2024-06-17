@@ -1,11 +1,11 @@
-import React, {useContext, useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import {useKeycloak} from "@react-keycloak/web";
-import {HomeOutlined, LaptopOutlined, UserOutlined} from '@ant-design/icons';
-import {Menu} from "antd";
-import {LoginOutlined, LogoutOutlined} from "@ant-design/icons/lib/icons";
-import {useTranslation} from "react-i18next";
-import {GlobalSettingsContext} from "../app/App";
+import React, {useContext, useEffect, useState} from "react"
+import {useNavigate} from "react-router-dom"
+import {useKeycloak} from "@react-keycloak/web"
+import {HomeOutlined, LaptopOutlined, UserOutlined} from '@ant-design/icons'
+import {Menu} from "antd"
+import {LoginOutlined, LogoutOutlined} from "@ant-design/icons/lib/icons"
+import {useTranslation} from "react-i18next"
+import {GlobalSettingsContext} from "../app/App"
 
 enum MenuEntry {
     HOME,
@@ -111,7 +111,7 @@ export const MenuProvider: React.FC = () => {
                 switch (item.type) {
                     case MenuEntry.HOME:
                         navigate('/')
-                        break;
+                        break
                     case MenuEntry.LOGOUT:
                         keycloak.logout()
                             .then(r => {

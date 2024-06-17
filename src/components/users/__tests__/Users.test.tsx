@@ -8,7 +8,7 @@ import "../../../i18n"
 import {GetAllPermissionsDocument} from "../../../graphql/generated"
 import {store} from "../../../store/store"
 import {http, HttpResponse} from 'msw'
-import {setupServer} from "msw/node";
+import {setupServer} from "msw/node"
 import {usersApi} from "../api/usersApi"
 import {Provider} from "react-redux"
 
@@ -27,7 +27,7 @@ const mockedRolesGql = {
         data: { getAllPermissions: [{ id: "63c16ce71ba30e5f08b4d66e", name: "GUEST" }] }
     }
 
-};
+}
 
 const mockedUsers = [
     {
