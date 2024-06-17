@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../Store/hooks";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import {decrement, increment, incrementAsync, incrementByAmount, incrementIfOdd, selectCount,} from "./counterSlice";
 import styles from "./Counter.module.css";
 

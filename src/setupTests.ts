@@ -2,7 +2,8 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom"
+import { TextEncoder } from "node:util"
 
 global.matchMedia = global.matchMedia || function () {
     return {
@@ -13,3 +14,5 @@ global.matchMedia = global.matchMedia || function () {
         }
     }
 }
+
+global.TextEncoder = TextEncoder

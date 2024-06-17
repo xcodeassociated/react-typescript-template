@@ -1,12 +1,18 @@
 import React, {useContext, useEffect, useReducer, useState} from "react";
 import styled from "styled-components";
-import {Page, Role, User} from "./api/api.types";
-import {useUsers} from "./hooks/useUsers";
+import {Page, Role, User} from "./api/usersApi.types";
 import type {ColumnsType} from "antd/es/table";
 import {Button, Divider, Form, Input, Select, Space, Table, Typography} from "antd";
 import {useTranslation} from "react-i18next";
-import {GlobalSettingsContext} from "../App/App";
+import {GlobalSettingsContext} from "../app/App";
 import {useRolesGraphql} from "./hooks/useRolesGraphql";
+import {
+    useCreateUserMutation,
+    useDeleteUserMutation,
+    useGetAllUsersQuery,
+    useGetUsersSizeQuery, useUpdateUserMutation
+} from "./api/usersApi";
+import {PayloadAction} from "@reduxjs/toolkit";
 
 
 const {Option} = Select
@@ -30,25 +36,36 @@ function pageReducer(prevState: Page = new Page(), action: Action): Page {
     }
 }
 
+const userInputToUser = (values: any, roles: Role[]): User => {
+    return {
+        _id: values._id,
+        email: values.email,
+        name: values.name,
+        role: roles.filter(e => e._id === values.role),
+        version: values.version,
+        createdBy: undefined,
+        createdDate: undefined,
+        modifiedBy: undefined,
+        modifiedDate: undefined
+    }
+}
+
+const toPayload = (data: Page): PayloadAction<{page: number, pageSize: number, sort: string, direction: string}> => {
+    return {payload: {page: data.page, pageSize: data.pageSize, sort: data.sort, direction: data.direction}, type: ""}
+}
+
 export const Users: React.FC = () => {
     const [page, dispatch] = useReducer(pageReducer, new Page())
     const {roles} = useRolesGraphql()
-    const {users, createUser, updateUser, deleteUser, getUsersSize} = useUsers(page)
+    const users = useGetAllUsersQuery(toPayload(page))
+    const size = useGetUsersSizeQuery()
+    const [createUser] = useCreateUserMutation()
+    const [updateUser] = useUpdateUserMutation()
+    const [deleteUser] = useDeleteUserMutation()
     const [form] = Form.useForm()
     const id = Form.useWatch("_id", form)
-    const [size, setSize] = useState<number>()
-    const globalSettings = useContext(GlobalSettingsContext)
     const {t} = useTranslation(['main']);
-
-    useEffect(() => {
-        getUsersSize()
-            .then(result => setSize(result))
-            .catch(error => console.error(error))
-    }, [])
-
-    useEffect(() => {
-        console.debug(`Users: ${JSON.stringify(globalSettings)}`)
-    }, [globalSettings])
+    const globalSettings = useContext(GlobalSettingsContext)
 
     const handleDeleteUser = async (id: string) => {
         await deleteUser(id)
@@ -118,6 +135,10 @@ export const Users: React.FC = () => {
         },
     ]
 
+    if (users.isLoading) {
+        return (<div>Loading...</div>)
+    }
+
     return (
         <UsersWrapper>
             <Divider orientation="left">{`${t(`users.t1`, {ns: ['main']})}`}</Divider>
@@ -163,7 +184,7 @@ export const Users: React.FC = () => {
             <Divider orientation="left">{`${t(`users.t2`, {ns: ['main']})}`}</Divider>
             <Table
                 bordered
-                dataSource={users?.map((e) => {
+                dataSource={users.data?.map((e) => {
                     return {...e, key: e._id}
                 })}
                 columns={columns.map(column => {
@@ -174,7 +195,7 @@ export const Users: React.FC = () => {
                     defaultPageSize: 10,
                     showSizeChanger: true,
                     pageSizeOptions: ['5', '10', '100'],
-                    total: size,
+                    total: size.data,
                     onChange: (page: number, pageSize: number) => {
                         const pageIndex = page - 1
                         dispatch({type: "PAGINATION_CHANGED", payload: new Page(pageIndex, pageSize)})
@@ -190,17 +211,3 @@ const UsersWrapper = styled.div`
   @media (max-width: 800px) {
   }
 `
-
-const userInputToUser = (values: any, roles: Role[]): User => {
-    return {
-        _id: values._id,
-        email: values.email,
-        name: values.name,
-        role: roles.filter(e => e._id === values.role),
-        version: values.version,
-        createdBy: undefined,
-        createdDate: undefined,
-        modifiedBy: undefined,
-        modifiedDate: undefined
-    }
-}

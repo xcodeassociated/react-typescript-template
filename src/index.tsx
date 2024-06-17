@@ -1,12 +1,12 @@
 import React from "react";
 import {createRoot} from "react-dom/client";
 import {Provider} from "react-redux";
-import {persistor, store} from "./Store/store";
+import {persistor, store} from "./store/store";
 import {PersistGate} from "redux-persist/integration/react"
-import App from "./Components/App/App";
+import App from "./components/app/App";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
-import keycloak from "./Keycloak/keycloak";
+import keycloak from "./keycloak/keycloak";
 import {ReactKeycloakProvider} from "@react-keycloak/web"
 import {AuthClientError, AuthClientEvent} from "@react-keycloak/core/lib/types";
 import {AuthClientTokens} from "@react-keycloak/core";

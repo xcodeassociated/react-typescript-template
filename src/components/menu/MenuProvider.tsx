@@ -5,7 +5,7 @@ import {HomeOutlined, LaptopOutlined, UserOutlined} from '@ant-design/icons';
 import {Menu} from "antd";
 import {LoginOutlined, LogoutOutlined} from "@ant-design/icons/lib/icons";
 import {useTranslation} from "react-i18next";
-import {GlobalSettingsContext} from "../App/App";
+import {GlobalSettingsContext} from "../app/App";
 
 enum MenuEntry {
     HOME,
@@ -89,7 +89,7 @@ export const MenuProvider: React.FC = () => {
     }, [])
 
     useEffect(() => {
-        console.log(`MenuProvider: ${JSON.stringify(globalSettings)}`)
+        // ...
     }, [globalSettings])
 
     return (

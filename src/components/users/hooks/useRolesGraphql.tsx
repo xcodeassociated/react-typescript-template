@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {Role} from "../api/api.types";
+import {Role} from "../api/usersApi.types";
 import {useGetAllPermissionsQuery} from "../../../graphql/generated";
 
 export const useRolesGraphql = () => {
@@ -25,7 +25,7 @@ export const useRolesGraphql = () => {
         }
 
         if (loading) {
-            console.debug("apollo: waiting for data...")
+            // ...
         }
 
         if (data) {

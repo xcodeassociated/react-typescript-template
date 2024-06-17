@@ -1,11 +1,11 @@
 import React, {createContext, useState} from "react";
-import {Counter} from "../Counter/Counter";
+import {Counter} from "../counter/Counter";
 import {useKeycloak} from "@react-keycloak/web";
 import {Navigate, Route, Routes} from "react-router-dom";
-import {Home} from "../Home/Home"
-import {Error, Unauthorized} from "../Error/Error";
-import {MenuProvider} from "../Menu/MenuProvider";
-import {Users} from "../Users/Users";
+import {Home} from "../home/Home"
+import {Error, Unauthorized} from "../error/Error";
+import {MenuProvider} from "../menu/MenuProvider";
+import {Users} from "../users/Users";
 import {Button, ConfigProvider, Layout, Space, Switch, theme} from "antd";
 import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons';
 import {LanguageSelector} from "./sub/LanguageSelector";

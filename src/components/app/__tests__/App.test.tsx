@@ -1,9 +1,9 @@
 import React from 'react';
 import {render} from '@testing-library/react';
 import {Provider} from 'react-redux';
-import {persistor, store} from '../../../Store/store';
+import {persistor, store} from '../../../store/store';
 import App from '../App';
-import keycloak from "../../../Keycloak/keycloak";
+import keycloak from "../../../keycloak/keycloak";
 import {ReactKeycloakProvider} from '@react-keycloak/web'
 import {PersistGate} from 'redux-persist/integration/react'
 import "../../../i18n"
