@@ -1,5 +1,4 @@
 import React, { useContext, useReducer } from 'react'
-import styled from 'styled-components'
 import { Page, Role, User } from './api/usersApi.types'
 import type { ColumnsType } from 'antd/es/table'
 import { Button, Divider, Form, Input, Select, Space, Table, Typography } from 'antd'
@@ -137,7 +136,7 @@ export const Users: React.FC = () => {
   }
 
   return (
-    <UsersWrapper>
+    <>
       <Divider orientation="left">{`${t(`users.t1`, { ns: ['main'] })}`}</Divider>
       <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
         <Form.Item name="name" label={`${t(`users.name`, { ns: ['main'] })}`} rules={[{ required: true }]}>
@@ -193,12 +192,7 @@ export const Users: React.FC = () => {
           },
         }}
       />
-    </UsersWrapper>
+    </>
   )
 }
 
-const UsersWrapper = styled.div`
-  font-size: 32px;
-  @media (max-width: 800px) {
-  }
-`
