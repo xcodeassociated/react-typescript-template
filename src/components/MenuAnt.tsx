@@ -5,7 +5,7 @@ import {HomeOutlined, LaptopOutlined, UserOutlined} from '@ant-design/icons'
 import {Menu} from "antd"
 import {LoginOutlined, LogoutOutlined} from "@ant-design/icons/lib/icons"
 import {useTranslation} from "react-i18next"
-import {GlobalSettingsContext} from "../app/App"
+import {GlobalSettingsContext} from "@/App"
 
 enum MenuEntry {
     HOME,
@@ -75,7 +75,7 @@ const menuItems: MenuItem[] = [
     },
 ]
 
-export const MenuProvider: React.FC = () => {
+export const MenuAnt: React.FC = () => {
     const [items, setItems] = useState<MenuItem[]>([])
     const {keycloak} = useKeycloak()
     const navigate = useNavigate()

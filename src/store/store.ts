@@ -1,8 +1,8 @@
 import {Action, combineReducers, configureStore, ThunkAction} from "@reduxjs/toolkit"
-import counterReducer from "../components/counter/counterSlice"
+import counterReducer from "../pages/counter/counterSlice"
 import storage from "redux-persist/lib/storage" // defaults to localStorage for web
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE,} from "redux-persist"
-import {usersApi} from "../components/users/api/usersApi"
+import {usersApi} from "../pages/users/api/usersApi"
 import {setupListeners} from '@reduxjs/toolkit/query'
 
 const persistConfig = {

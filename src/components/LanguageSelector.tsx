@@ -1,6 +1,6 @@
 import React from "react"
 import {Select} from "antd"
-import {Error} from "../../error/Error"
+import {Error} from "@/pages/error/Error"
 import {useTranslation} from "react-i18next"
 
 

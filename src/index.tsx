@@ -3,17 +3,18 @@ import {createRoot} from "react-dom/client"
 import {Provider} from "react-redux"
 import {persistor, store} from "./store/store"
 import {PersistGate} from "redux-persist/integration/react"
-import App from "./components/app/App"
-import reportWebVitals from "./reportWebVitals"
-import "./index.css"
-import keycloak from "./keycloak/keycloak"
+import {ApolloClient, ApolloProvider, createHttpLink, InMemoryCache} from "@apollo/client"
+import {setContext} from "@apollo/client/link/context"
 import {ReactKeycloakProvider} from "@react-keycloak/web"
 import {AuthClientError, AuthClientEvent} from "@react-keycloak/core/lib/types"
 import {AuthClientTokens} from "@react-keycloak/core"
 import {BrowserRouter} from "react-router-dom"
-import './i18n'
-import {ApolloClient, ApolloProvider, createHttpLink, InMemoryCache} from "@apollo/client"
-import {setContext} from "@apollo/client/link/context"
+import reportWebVitals from "./reportWebVitals"
+import keycloak from "@/lib/keycloak"
+import App from "./App"
+import '@/locales/i18n'
+import "./index.css"
+
 
 const container = document.getElementById("root")!
 const root = createRoot(container)

@@ -1,15 +1,15 @@
 import React, {act} from "react"
 import {render, screen, waitFor} from "@testing-library/react"
 import {BrowserRouter} from "react-router-dom"
-import {Users} from "../Users"
-import {GlobalSettingsContext} from "../../app/App"
+import {Users} from "./Users"
+import {GlobalSettingsContext} from "@/App"
 import {MockedProvider} from "@apollo/client/testing"
-import "../../../i18n"
-import {GetAllPermissionsDocument} from "../../../graphql/generated"
-import {store} from "../../../store/store"
+import "../../locales/i18n"
+import {GetAllPermissionsDocument} from "@/graphql/generated"
+import {store} from "@/store/store"
 import {http, HttpResponse} from 'msw'
 import {setupServer} from "msw/node"
-import {usersApi} from "../api/usersApi"
+import {usersApi} from "./api/usersApi"
 import {Provider} from "react-redux"
 
 const mockedRolesGql = {

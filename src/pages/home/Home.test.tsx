@@ -1,9 +1,9 @@
 import React from 'react'
 import {render, screen} from '@testing-library/react'
 import {BrowserRouter} from "react-router-dom"
-import {Home} from '../Home'
-import {GlobalSettingsContext} from '../../app/App'
-import "../../../i18n"
+import {Home} from './Home'
+import {GlobalSettingsContext} from '@/App'
+import '@/locales/i18n'
 
 test('renders home page component', () => {
 

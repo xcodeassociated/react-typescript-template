@@ -1,14 +1,14 @@
 import React, {createContext, useState} from "react"
-import {Counter} from "../counter/Counter"
+import {Counter} from "./pages/counter/Counter"
 import {useKeycloak} from "@react-keycloak/web"
 import {Navigate, Route, Routes} from "react-router-dom"
-import {Home} from "../home/Home"
-import {Error, Unauthorized} from "../error/Error"
-import {MenuProvider} from "../menu/MenuProvider"
-import {Users} from "../users/Users"
+import {Home} from "./pages/home/Home"
+import {Error, Unauthorized} from "./pages/error/Error"
+import {MenuAnt} from "./components/MenuAnt"
+import {Users} from "./pages/users/Users"
 import {Button, ConfigProvider, Layout, Space, Switch, theme} from "antd"
 import {MenuFoldOutlined, MenuUnfoldOutlined} from '@ant-design/icons'
-import {LanguageSelector} from "./sub/LanguageSelector"
+import {LanguageSelector} from "./components/LanguageSelector"
 import {useTranslation} from "react-i18next"
 
 
@@ -71,7 +71,7 @@ const App: React.FC = () => {
                             <Layout style={{padding: '24px 0', background: "white"}}>
                                 <Sider trigger={null} collapsible collapsed={collapsed}>
                                     <div className="demo-logo-vertical"/>
-                                    <MenuProvider/>
+                                    <MenuAnt />
                                 </Sider>
                                 <Header style={{padding: 0, background: colorBgContainer}}>
                                     <Button

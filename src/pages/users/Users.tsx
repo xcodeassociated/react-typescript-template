@@ -4,7 +4,7 @@ import {Page, Role, User} from "./api/usersApi.types"
 import type {ColumnsType} from "antd/es/table"
 import {Button, Divider, Form, Input, Select, Space, Table, Typography} from "antd"
 import {useTranslation} from "react-i18next"
-import {GlobalSettingsContext} from "../app/App"
+import {GlobalSettingsContext} from "@/App"
 import {useRolesGraphql} from "./hooks/useRolesGraphql"
 import {
     useCreateUserMutation,

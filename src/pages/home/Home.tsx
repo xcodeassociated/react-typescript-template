@@ -11,7 +11,6 @@ export const Home: React.FC = () => {
     const {t} = useTranslation(['main'])
 
     return (
-
         <HomeWrapper>
             <h1>
                 <p>{t(`home.title`, {ns: ['main']})}</p>
