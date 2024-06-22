@@ -21,6 +21,9 @@ i18next.use(initReactI18next).init({
     bindI18nStore: 'added',
     useSuspense: true,
   },
+  interpolation: {
+    escapeValue: false,
+  },
 })
 
 export default i18next

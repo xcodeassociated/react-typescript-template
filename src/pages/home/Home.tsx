@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
+import { Button } from '@/components/ui/button'
 
 const HomeWrapper = styled.div`
   @media (max-width: 800px) {
@@ -18,6 +19,7 @@ export const Home: React.FC = () => {
       <h3>
         <p>{t(`home.details`, { ns: ['main'] })}</p>
       </h3>
+      <Button variant="outline">Button</Button>
     </HomeWrapper>
   )
 }

@@ -11,6 +11,7 @@ import { setupServer } from 'msw/node'
 import { usersApi } from './api/usersApi'
 import { Provider } from 'react-redux'
 import '@/locales/i18n'
+import { ThemeProvider } from '@/components/theme-provider'
 
 const mockedRolesGql = {
   request: {
@@ -76,17 +77,19 @@ describe('user component tests', () => {
     await act(async () =>
       render(
         <React.StrictMode>
-          <Provider store={store}>
-            <GlobalSettingsContext.Provider value={{ theme: { isDark: false } }}>
-              <BrowserRouter>
-                <MockedProvider mocks={[mockedRolesGql]} addTypename={false}>
-                  <Users />
-                </MockedProvider>
-              </BrowserRouter>
-            </GlobalSettingsContext.Provider>
-          </Provider>
-        </React.StrictMode>
-      )
+          <ThemeProvider>
+            <Provider store={store}>
+              <GlobalSettingsContext.Provider value={{ theme: { isDark: false } }}>
+                <BrowserRouter>
+                  <MockedProvider mocks={[mockedRolesGql]} addTypename={false}>
+                    <Users />
+                  </MockedProvider>
+                </BrowserRouter>
+              </GlobalSettingsContext.Provider>
+            </Provider>
+          </ThemeProvider>
+        </React.StrictMode>,
+      ),
     )
 
     await screen.findByText('Loading...')

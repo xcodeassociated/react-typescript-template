@@ -1,5 +1,5 @@
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux'
 import { persistor, store } from './store/store'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -14,9 +14,7 @@ import keycloak from '@/lib/keycloak'
 import App from './App'
 import '@/locales/i18n'
 import './index.css'
-
-const container = document.getElementById('root')!
-const root = createRoot(container)
+import { ThemeProvider } from '@/components/theme-provider'
 
 const onKeycloakEvent = (event: AuthClientEvent, error?: AuthClientError): void => {
   if (error) {
@@ -48,6 +46,10 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
+const root = ReactDOM.createRoot(
+  document.getElementById('root') as HTMLElement
+)
+
 root.render(
   <ReactKeycloakProvider
     authClient={keycloak}
@@ -56,15 +58,17 @@ root.render(
     initOptions={{ onLoad: 'check-sso', redirectUri: 'http://localhost:3000/' }}
   >
     <React.StrictMode>
-      <Provider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <BrowserRouter>
-            <ApolloProvider client={client}>
-              <App />
-            </ApolloProvider>
-          </BrowserRouter>
-        </PersistGate>
-      </Provider>
+      <ThemeProvider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <BrowserRouter>
+              <ApolloProvider client={client}>
+                <App />
+              </ApolloProvider>
+            </BrowserRouter>
+          </PersistGate>
+        </Provider>
+      </ThemeProvider>
     </React.StrictMode>
   </ReactKeycloakProvider>
 )

@@ -179,7 +179,7 @@ export const Users: React.FC = () => {
           return { ...e, key: e._id }
         })}
         columns={columns.map((column) => {
-          return { ...column, title: `${t(column.title, { ns: ['main'] })}` }
+          return { ...column, title: `${t('column.title', { ns: ['main'] })}` }
         })}
         rowClassName="editable-row"
         pagination={{
