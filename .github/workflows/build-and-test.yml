@@ -2,9 +2,9 @@ name: NodeJS with Webpack
 
 on:
   push:
-    branches: [ "main", "release/*" ]
+    branches: ['main', 'release/*']
   pull_request:
-    branches: [ "**" ]
+    branches: ['**']
 
 jobs:
   build:
@@ -15,23 +15,23 @@ jobs:
         node-version: [16.x, 18.x]
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
-      run: npm install
+      - name: Install dependencies
+        run: npm install
 
-    - name: Codegen
-      run: npm run generate:graphql
+      - name: Codegen
+        run: npm run generate:graphql
 
-    - name: Run the tests
-      run: npm test
+      - name: Run the tests
+        run: npm test
 
-    - name: Build
-      run: npm run build
-      env:
-        CI: false
+      - name: Build
+        run: npm run build
+        env:
+          CI: false
