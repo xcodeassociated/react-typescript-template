@@ -15,7 +15,6 @@ import './i18n'
 import {ApolloClient, ApolloProvider, createHttpLink, InMemoryCache} from "@apollo/client"
 import {setContext} from "@apollo/client/link/context"
 
-
 const container = document.getElementById("root")!
 const root = createRoot(container)
 
@@ -34,7 +33,7 @@ const httpLink = createHttpLink({
     uri: 'http://localhost:8080/graphql',
 })
 
-const authLink = setContext((_, { headers }) => {
+const authLink = setContext((_, {headers}) => {
     const token = keycloak.token
     return {
         headers: {
