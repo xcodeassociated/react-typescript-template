@@ -8,20 +8,23 @@ import { ReactKeycloakProvider } from '@react-keycloak/web'
 import { PersistGate } from 'redux-persist/integration/react'
 import '@/locales/i18n'
 import { ThemeProvider } from '@/components/theme-provider'
+import { BrowserRouter } from 'react-router-dom'
 
 test('renders learn react link', () => {
   const { getByText } = render(
     <ReactKeycloakProvider authClient={keycloak}>
       <React.StrictMode>
-        <ThemeProvider>
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <App />
-            </PersistGate>
-          </Provider>
-        </ThemeProvider>
+        <BrowserRouter>
+          <ThemeProvider>
+            <Provider store={store}>
+              <PersistGate loading={null} persistor={persistor}>
+                <App />
+              </PersistGate>
+            </Provider>
+          </ThemeProvider>
+        </BrowserRouter>
       </React.StrictMode>
-    </ReactKeycloakProvider>,
+    </ReactKeycloakProvider>
   )
 
   // eslint-disable-next-line testing-library/prefer-screen-queries

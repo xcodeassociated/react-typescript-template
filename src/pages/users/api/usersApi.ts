@@ -1,16 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { User } from './usersApi.types'
+import type { User, UserInput } from './usersApi.types'
 import keycloak from '@/lib/keycloak'
 import { PayloadAction } from '@reduxjs/toolkit'
-
-const parse = (data: User) => {
-  return {
-    name: data.name,
-    email: data.email,
-    role: data.role.map((e) => e._id),
-    version: data.version,
-  }
-}
 
 export const usersApi = createApi({
   tagTypes: ['users'],
@@ -44,18 +35,18 @@ export const usersApi = createApi({
       // providesTags: ['users'],
     }),
     createUser: builder.mutation({
-      query: (data: User) => ({
+      query: (data: UserInput) => ({
         url: '/users',
         method: 'POST',
-        body: parse(data),
+        body: data,
       }),
       invalidatesTags: ['users'],
     }),
     updateUser: builder.mutation({
-      query: (data: User) => ({
+      query: (data: UserInput) => ({
         url: `/users/${data._id}`,
         method: 'PUT',
-        body: parse(data),
+        body: data,
       }),
       invalidatesTags: ['users'],
     }),

@@ -1,19 +1,23 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext } from 'react'
 import { Counter } from '@/pages/counter/Counter'
 import { useKeycloak } from '@react-keycloak/web'
-import { Navigate, Route, Routes } from 'react-router-dom'
-import { Home } from '@/pages/home/Home'
-import { Error, Unauthorized } from '@/pages/error/Error'
-import { MenuAnt } from '@/components/MenuAnt'
-import { Users } from '@/pages/users/Users'
-import { Button, ConfigProvider, Layout, Space, Switch, theme } from 'antd'
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
-import { LanguageSelector } from '@/components/LanguageSelector'
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { MenuItem } from '@/components/app/menu-item'
+import { Label } from '@radix-ui/react-menu'
+import { NavigationMenu, NavigationMenuList } from '@/components/ui/navigation-menu'
+import { NavMenuItem } from '@/components/app/nav-item'
+import { MessageSquare, Search } from 'lucide-react'
+import { ModeToggle } from '@/components/mode-toggle'
+import { Input } from '@/components/ui/input'
+import { UserDropdownMenu } from '@/components/app/user-dropdown-menu'
+import { Error, Unauthorized } from '@/pages/error/Error'
+import { Home } from '@/pages/home/home'
+import { SideMenu } from '@/components/app/side-menu'
+import { Users } from '@/pages/users/Users'
+import { setLanguage } from '@/locales/i18n'
 
-const { Header, Content, Footer, Sider } = Layout
-
-// @ts-ignore
+//@ts-ignore
 const ProtectedRoute = ({ predicate, redirectPath = '/', children }) => {
   if (!predicate) {
     return <Navigate to={redirectPath} replace />
@@ -21,102 +25,144 @@ const ProtectedRoute = ({ predicate, redirectPath = '/', children }) => {
   return children
 }
 
-export type ThemeColor = {
-  isDark: boolean
+export type GlobalSettings = {
+  data?: string
 }
 
-export type GlobalSettings = {
-  theme: ThemeColor
+const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault()
+  console.log(`search: ${e.currentTarget.search.value}`)
+  e.currentTarget.reset()
 }
-const defaultTheme: ThemeColor = { isDark: false }
-const defaultGlobalSettings: GlobalSettings = { theme: defaultTheme }
+
+const defaultGlobalSettings: GlobalSettings = { data: 'some-global-data' }
 export const GlobalSettingsContext = createContext<GlobalSettings>(defaultGlobalSettings)
 
 const App: React.FC = () => {
   const { initialized, keycloak } = useKeycloak()
-  const [collapsed, setCollapsed] = useState(false)
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken()
-  const { defaultAlgorithm, darkAlgorithm } = theme
-  const { t } = useTranslation(['main'])
-  const [darkMode, setDarkMode] = useState<boolean>(false)
+  const navigate = useNavigate()
+  const { t, i18n } = useTranslation(['main'])
+
+  const menuItems: MenuItem[] = [
+    {
+      key: `${t('menu.home', { ns: ['main'] })}`,
+      route: '/',
+      restricted: false,
+    },
+    {
+      key: `${t('menu.counter', { ns: ['main'] })}`,
+      route: '/counter',
+      restricted: true,
+    },
+    {
+      key: `${t('menu.users', { ns: ['main'] })}`,
+      route: '/users',
+      restricted: true,
+    },
+  ]
+
+  const handleUserDropdownSelect = (item: string) => {
+    console.log(`User dropdown change: ${item}`)
+    switch (item) {
+      case 'profile':
+        console.log('Profile')
+        break
+      case 'settings':
+        console.log('Settings')
+        break
+      case 'lang/english':
+        setLanguage('en')
+        break
+      case 'lang/polish':
+        setLanguage('pl')
+        break
+      default:
+        throw Error('Unsupported action')
+    }
+  }
 
   if (!initialized) {
     return <div>Loading...</div>
   }
 
-  const changeTheme = (value: boolean) => {
-    setDarkMode(value)
-  }
-
   return (
-    <div className="App">
-      <GlobalSettingsContext.Provider value={{ theme: { isDark: darkMode } }}>
-        <ConfigProvider
-          theme={{
-            algorithm: darkMode ? darkAlgorithm : defaultAlgorithm,
-          }}
-        >
-          <Layout>
-            <Header style={{ display: 'flex', alignItems: 'center' }}>
-              <div className="demo-logo" />
-              <Space size={'small'} style={{ marginLeft: 'auto' }}>
-                <Space size={'small'} style={{ color: 'white' }}>
-                  <p>{t('general.darkMode', { ns: ['main'] })}</p>
-                  <Switch onChange={changeTheme} />
-                </Space>
-                <LanguageSelector />
-              </Space>
-            </Header>
-            <Content style={{ padding: '0 50px' }}>
-              <Layout style={{ padding: '24px 0', background: 'white' }}>
-                <Sider trigger={null} collapsible collapsed={collapsed}>
-                  <div className="demo-logo-vertical" />
-                  <MenuAnt />
-                </Sider>
-                <Header style={{ padding: 0, background: colorBgContainer }}>
-                  <Button
-                    type="text"
-                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                    onClick={() => setCollapsed(!collapsed)}
-                    style={{
-                      fontSize: '16px',
-                      width: 64,
-                      height: 64,
-                    }}
-                  />
-                </Header>
-                <Content style={{ padding: '0 24px', minHeight: 280 }}>
-                  <Routes>
-                    <Route path="*" element={<Error />} />
-                    <Route path="/" element={<Home />} />
-                    <Route path="/unauthorized" element={<Unauthorized />} />
-                    <Route
-                      path="/counter"
-                      element={
-                        <ProtectedRoute predicate={keycloak?.authenticated} redirectPath={'/unauthorized'}>
-                          <Counter />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/users"
-                      element={
-                        <ProtectedRoute predicate={keycloak?.authenticated} redirectPath={'/unauthorized'}>
-                          <Users />
-                        </ProtectedRoute>
-                      }
-                    />
-                  </Routes>
-                </Content>
-              </Layout>
-            </Content>
-            <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
-          </Layout>
-        </ConfigProvider>
-      </GlobalSettingsContext.Provider>
-    </div>
+    <GlobalSettingsContext.Provider value={{ data: defaultGlobalSettings.data }}>
+      <div className="flex min-h-screen w-full flex-col">
+        <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+          <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+            <Label
+              className="flex cursor-pointer items-center gap-2 text-lg font-semibold md:text-base"
+              onClick={() => navigate('/')}
+            >
+              {t(`app.name`, { ns: ['main'] })}
+              <span className="sr-only">Logo</span>
+            </Label>
+            <NavigationMenu>
+              <NavigationMenuList>
+                {menuItems
+                  .filter((item) => (item.restricted ? keycloak.authenticated : true))
+                  .map((item) => (
+                    <NavMenuItem key={item.key} item={item} />
+                  ))}
+              </NavigationMenuList>
+            </NavigationMenu>
+          </nav>
+          <SideMenu items={menuItems} authenticated={keycloak.authenticated ? keycloak.authenticated : false} />
+          <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
+            <form className="ml-auto flex-1 sm:flex-initial" onSubmit={handleSearch}>
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  name="search"
+                  placeholder="Search..."
+                  className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+                />
+              </div>
+            </form>
+            <div>
+              <ModeToggle />
+            </div>
+            <UserDropdownMenu handleDropdownSelectFn={handleUserDropdownSelect} />
+          </div>
+        </header>
+        <main className="flex flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
+          <div className="grid w-full grid-cols-1 content-start items-center justify-center gap-4">
+            <div className="col-span-1">
+              <div className="text-4xl font-bold">{t(`home.section1`, { ns: ['main'] })}</div>
+              <div className="text-lg text-muted-foreground">{t(`home.section2`, { ns: ['main'] })}</div>
+            </div>
+            <Routes>
+              <Route path="*" element={<Error />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/unauthorized" element={<Unauthorized />} />
+              <Route
+                path="/counter"
+                element={
+                  <ProtectedRoute predicate={keycloak?.authenticated} redirectPath={'/unauthorized'}>
+                    <Counter />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute predicate={keycloak?.authenticated} redirectPath={'/unauthorized'}>
+                    <Users />
+                  </ProtectedRoute>
+                }
+              />
+            </Routes>
+          </div>
+        </main>
+        <footer className="flex h-16 items-center justify-center border-t bg-background px-4 md:px-6">
+          <div className="flex items-center gap-4">
+            <MessageSquare className="h-5 w-5" />
+            <span className="text-muted-foreground">{t(`footer.text`, { ns: ['main'] })}</span>
+          </div>
+        </footer>
+      </div>
+    </GlobalSettingsContext.Provider>
   )
 }
 

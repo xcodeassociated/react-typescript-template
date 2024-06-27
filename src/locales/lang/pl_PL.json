@@ -6,23 +6,65 @@
     "login": "Zaloguj się",
     "logout": "Wyloguj się"
   },
+  "user_dropdown": {
+    "profile": "Profil",
+    "my_account": "Moje Konto",
+    "settings": "Ustawienia",
+    "select_language": "Wybierz język",
+    "en": "Angielski",
+    "pl": "Polski",
+    "logout": "Wyloguj się",
+    "login": "Zaloguj się",
+    "register": "Zarejestruj się"
+  },
   "users": {
-    "t1": "Dane Użytkownika",
+    "t1": "Użytkownicy",
     "t2": "Tabela Użytkowników",
+    "f1": "Wprowadź dane użytkownika do formularza",
+    "id": "ID",
     "name": "Imię",
+    "name_placeholder": "Wpisz Imię...",
+    "name_validation": "Nazwa użytkownika musi mieć co najmniej 2 znaki",
     "email": "Email",
+    "email_placeholder": "Wpisz Email...",
+    "email_validation": "Nazwa użytkownika musi mieć co najmniej 2 znaki",
     "role": "Rola",
+    "role_placeholder": "Wpisz Rolę...",
+    "role_validation": "Należy wybrać rolę",
     "actions": "Akcje",
     "submit": "Wyślij",
     "reset": "Resetuj",
     "update": "Aktualizuj",
-    "delete": "Usuń"
+    "delete": "Usuń",
+    "add": "Dodaj Użytkownika",
+    "role_not_found": "Rola nie znaleziona"
   },
-  "general": {
-    "darkMode": "Ciemny Motyw"
+  "app": {
+    "name": "Shadcn"
   },
   "home": {
-    "title": "React Typescript Learning",
-    "details": "Ta aplikacja powstała z myślą o nauce FE."
+    "section1": "Shadcn CRA Starter",
+    "section2": "React Typescript Szablon",
+    "title": "React Typescript Nauka",
+    "subtitle": "Aplikacja testowa",
+    "details": "Ta aplikacja powstała z myślą o nauce FE. Jest to prosta aplikacja składająca się z kilku stron i komponentów.\nAplikacja korzysta z React with Typescript, Redux, Redux-Saga, React-Router itp.",
+    "contact": "Możesz się ze mną skontaktować poprzez github: xcodeassociated"
+  },
+  "counter": {
+    "title": "Licznik",
+    "subtitle": "React Redux Licznik",
+    "increment": "Zwiększ",
+    "decrement": "Zmniejsz",
+    "increment_by": "Zwiększ o",
+    "add_amount": "Dodaj",
+    "add_async": "Dodaj asynchronicznie",
+    "add_if_odd": "Dodaj jeśli nieparzyste"
+  },
+  "footer": {
+    "text": "Stworzono z ❤\uFE0F & Shadcn"
+  },
+  "error": {
+    "unauthorized": "Brak dostępu",
+    "not_found": "Nie znaleziono strony"
   }
 }

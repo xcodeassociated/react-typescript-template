@@ -23,6 +23,14 @@ export interface User {
   modifiedDate: string | undefined
 }
 
+export interface UserInput {
+  _id: string | undefined
+  name: string
+  email: string
+  role: string[]
+  version: number | undefined
+}
+
 export class Page {
   page: number
   pageSize: number
