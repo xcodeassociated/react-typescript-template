@@ -7,7 +7,7 @@ export const usersApi = createApi({
   tagTypes: ['users', 'usersCount'],
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://localhost:8080/coroutine',
+    baseUrl: process.env.REACT_APP_BACKEND_URL + '/coroutine',
     prepareHeaders: (headers, { getState }) => {
       const token = keycloak.token
       if (token) {

@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { persistor, store } from './store/store'
 import { PersistGate } from 'redux-persist/integration/react'
@@ -28,7 +28,7 @@ const onKeycloakTokens = (tokens: AuthClientTokens): void => {
 }
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:8080/graphql',
+  uri: process.env.REACT_APP_BACKEND_URL + '/graphql',
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -46,16 +46,14 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 })
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-)
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
 root.render(
   <ReactKeycloakProvider
     authClient={keycloak}
     onEvent={onKeycloakEvent}
     onTokens={onKeycloakTokens}
-    initOptions={{ onLoad: 'check-sso', redirectUri: 'http://localhost:3000/' }}
+    initOptions={{ onLoad: 'check-sso', redirectUri: process.env.REACT_APP_DOMAIN }}
   >
     <React.StrictMode>
       <ThemeProvider>

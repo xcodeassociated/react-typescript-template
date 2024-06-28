@@ -2,7 +2,6 @@ import React, { act } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom'
 import { Users } from './Users'
-import { GlobalSettingsContext } from '@/App'
 import { MockedProvider } from '@apollo/client/testing'
 import { GetAllPermissionsDocument } from '@/graphql/generated'
 import { store } from '@/store/store'
@@ -44,10 +43,10 @@ const mockedUsers = [
   },
 ]
 export const handlers = [
-  http.get('http://localhost:8080/coroutine/users', () => {
+  http.get(process.env.REACT_APP_BACKEND_URL + '/coroutine/users', () => {
     return HttpResponse.json(mockedUsers)
   }),
-  http.get('http://localhost:8080/coroutine/usersCount', () => {
+  http.get(process.env.REACT_APP_BACKEND_URL + '/coroutine/usersCount', () => {
     return HttpResponse.json(1)
   }),
 ]
