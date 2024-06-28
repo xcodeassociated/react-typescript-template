@@ -16,6 +16,7 @@ import { Home } from '@/pages/home/home'
 import { SideMenu } from '@/components/app/side-menu'
 import { Users } from '@/pages/users/Users'
 import { setLanguage } from '@/locales/i18n'
+import CookieConsent from '@/components/custom/coockie-consent'
 
 //@ts-ignore
 const ProtectedRoute = ({ predicate, redirectPath = '/', children }) => {
@@ -33,6 +34,14 @@ const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault()
   console.log(`search: ${e.currentTarget.search.value}`)
   e.currentTarget.reset()
+}
+
+const handleCookieConsentAccept = () => {
+  console.log(`Cookie consent ACCEPTED`)
+}
+
+const handleCookieConsentDecline = () => {
+  console.log(`Cookie consent DECLINED`)
 }
 
 const defaultGlobalSettings: GlobalSettings = { data: 'some-global-data' }
@@ -154,6 +163,7 @@ const App: React.FC = () => {
               />
             </Routes>
           </div>
+          <CookieConsent onAcceptCallback={handleCookieConsentAccept} onDeclineCallback={handleCookieConsentDecline} />
         </main>
         <footer className="flex h-16 items-center justify-center border-t bg-background px-4 md:px-6">
           <div className="flex items-center gap-4">
