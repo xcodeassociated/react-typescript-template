@@ -102,7 +102,7 @@ export function UserDropdownMenu({ handleDropdownSelectFn }: UserDropdownMenuPro
               <User className="mr-2 h-4 w-4" />
               <span>{t('user_dropdown.login', { ns: ['main'] })}</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => handleDropdownSelectFn('register')}>
+            <DropdownMenuItem onSelect={() => keycloak.register()}>
               <UserPlus className="mr-2 h-4 w-4" />
               <span>{t('user_dropdown.register', { ns: ['main'] })}</span>
             </DropdownMenuItem>
