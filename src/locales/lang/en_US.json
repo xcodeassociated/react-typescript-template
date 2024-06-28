@@ -4,7 +4,13 @@
     "users": "Users",
     "counter": "Counter",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "search": "Search..."
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
   },
   "user_dropdown": {
     "profile": "Profile",

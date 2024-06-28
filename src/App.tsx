@@ -8,7 +8,7 @@ import { Label } from '@radix-ui/react-menu'
 import { NavigationMenu, NavigationMenuList } from '@/components/ui/navigation-menu'
 import { NavMenuItem } from '@/components/app/nav-item'
 import { MessageSquare, Search } from 'lucide-react'
-import { ModeToggle } from '@/components/mode-toggle'
+import { ModeToggle } from '@/components/custom/mode-toggle'
 import { Input } from '@/components/ui/input'
 import { UserDropdownMenu } from '@/components/app/user-dropdown-menu'
 import { Error, Unauthorized } from '@/pages/error/Error'
@@ -115,7 +115,7 @@ const App: React.FC = () => {
                 <Input
                   type="search"
                   name="search"
-                  placeholder="Search..."
+                  placeholder={t('menu.search', { ns: ['main'] })}
                   className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
                 />
               </div>

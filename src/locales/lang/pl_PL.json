@@ -4,7 +4,13 @@
     "users": "Użytkownicy",
     "counter": "Licznik",
     "login": "Zaloguj się",
-    "logout": "Wyloguj się"
+    "logout": "Wyloguj się",
+    "search": "Szukaj..."
+  },
+  "theme": {
+    "light": "Jasny",
+    "dark": "Ciemny",
+    "system": "System"
   },
   "user_dropdown": {
     "profile": "Profil",
