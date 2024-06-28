@@ -33,10 +33,6 @@ export const Users: React.FC = () => {
   const { t } = useTranslation(['main'])
   const columns = useUserColumns()
 
-  useEffect(() => {
-    size.refetch()
-  }, [users])
-
   if (users.isLoading) {
     return <div>Loading...</div>
   }

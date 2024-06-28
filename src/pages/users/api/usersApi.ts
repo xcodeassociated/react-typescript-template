@@ -4,7 +4,7 @@ import keycloak from '@/lib/keycloak'
 import { PayloadAction } from '@reduxjs/toolkit'
 
 export const usersApi = createApi({
-  tagTypes: ['users'],
+  tagTypes: ['users', 'usersCount'],
   reducerPath: 'usersApi',
   baseQuery: fetchBaseQuery({
     baseUrl: 'http://localhost:8080/coroutine',
@@ -32,7 +32,7 @@ export const usersApi = createApi({
     }),
     getUsersSize: builder.query<number, void>({
       query: () => `/usersCount`,
-      // providesTags: ['users'],
+      providesTags: ['usersCount'],
     }),
     createUser: builder.mutation({
       query: (data: UserInput) => ({
@@ -40,7 +40,7 @@ export const usersApi = createApi({
         method: 'POST',
         body: data,
       }),
-      invalidatesTags: ['users'],
+      invalidatesTags: ['users', 'usersCount'],
     }),
     updateUser: builder.mutation({
       query: (data: UserInput) => ({
@@ -48,14 +48,14 @@ export const usersApi = createApi({
         method: 'PUT',
         body: data,
       }),
-      invalidatesTags: ['users'],
+      invalidatesTags: ['users', 'usersCount'],
     }),
     deleteUser: builder.mutation({
       query: (data: string) => ({
         url: `/users/${data}`,
         method: 'DELETE',
       }),
-      invalidatesTags: ['users'],
+      invalidatesTags: ['users', 'usersCount'],
     }),
   }),
 })

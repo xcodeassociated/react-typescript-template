@@ -53,7 +53,8 @@
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
-    "generate:graphql": "graphql-codegen --config codegen.ts"
+    "generate:graphql": "graphql-codegen --config codegen.ts",
+    "production": "serve -s build"
   },
   "eslintConfig": {
     "extends": [
