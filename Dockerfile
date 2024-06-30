@@ -18,10 +18,7 @@ COPY . .
 RUN npm run generate:graphql
 
 # Build the app
-RUN npm run build
-
-# Remove .env file
-RUN rm .env
+RUN REACT_APP_ENV=production npm run build
 
 # Use NGINX as the production server
 FROM nginx:stable-alpine-slim
