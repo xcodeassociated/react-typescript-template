@@ -27,3 +27,5 @@ yarn-error.log*
 
 src/graphql/*.ts
 src/graphql/*.js
+
+.env
