@@ -14,8 +14,14 @@ RUN npm install
 # Copy app source code to the working directory
 COPY . .
 
+# Generate types
+RUN npm run generate:graphql
+
 # Build the app
 RUN npm run build
+
+# Remove .env file
+RUN rm .env
 
 # Use NGINX as the production server
 FROM nginx:stable-alpine-slim
