@@ -23,6 +23,9 @@ RUN REACT_APP_ENV=production npm run build
 # Use NGINX as the production server
 FROM nginx:stable-alpine-slim
 
+# Copy the NGINX configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copy the build output from the build stage to NGINX
 COPY --from=build-stage /app/build /usr/share/nginx/html
 
