@@ -17,6 +17,7 @@ import { SideMenu } from '@/components/app/side-menu'
 import { Users } from '@/pages/users/Users'
 import { setLanguage } from '@/locales/i18n'
 import CookieConsent from '@/components/custom/coockie-consent'
+import { LoadingScreenMemo } from '@/components/app/loading-screen'
 
 //@ts-ignore
 const ProtectedRoute = ({ predicate, redirectPath = '/', children }) => {
@@ -91,7 +92,7 @@ const App: React.FC = () => {
   }
 
   if (!initialized) {
-    return <div>Loading...</div>
+    return <LoadingScreenMemo />
   }
 
   return (

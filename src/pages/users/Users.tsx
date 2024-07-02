@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Page } from './api/usersApi.types'
@@ -10,6 +10,7 @@ import { PaginationState, SortingState } from '@tanstack/react-table'
 import { DataTable } from '@/components/custom/data-table'
 import { UserDialog } from './components/user-dialog'
 import { useUserColumns } from '@/pages/users/hooks/useColumns'
+import { LoadingScreenMemo } from '@/components/app/loading-screen'
 
 const buildPage = (pagination: PaginationState, sorting: SortingState): Page => {
   return new Page(pagination.pageIndex, pagination.pageSize, sorting[0].id, sorting[0].desc ? 'DESC' : 'ASC')
@@ -34,7 +35,7 @@ export const Users: React.FC = () => {
   const columns = useUserColumns()
 
   if (users.isLoading) {
-    return <div>Loading...</div>
+    return <LoadingScreenMemo />
   }
 
   return (

@@ -89,8 +89,6 @@ describe('user component tests', () => {
       )
     )
 
-    await screen.findByText('Loading...')
-
     await waitFor(() => {
       expect(screen.getByText(/John Snow/i)).toBeInTheDocument()
       expect(screen.getByText(/john.snow@email.com/i)).toBeInTheDocument()
