@@ -53,7 +53,10 @@ root.render(
     authClient={keycloak}
     onEvent={onKeycloakEvent}
     onTokens={onKeycloakTokens}
-    initOptions={{ onLoad: 'check-sso' }}
+    initOptions={{
+      onLoad: 'check-sso',
+      silentCheckSsoRedirectUri: process.env.REACT_APP_DOMAIN + '/silent-check-sso.html',
+    }}
   >
     <React.StrictMode>
       <ThemeProvider>
