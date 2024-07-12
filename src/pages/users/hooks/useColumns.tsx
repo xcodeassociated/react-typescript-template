@@ -21,7 +21,7 @@ const parse = (data: User): UserInput => {
     _id: data._id,
     name: data.name,
     email: data.email,
-    role: data.role.filter((e) => e !== undefined).map((e) => e._id!!),
+    role: data.role,
     version: data.version,
   }
 }

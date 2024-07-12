@@ -1,7 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import type { User, UserInput } from './usersApi.types'
+import type { User, UserInput, UserInputDto } from './usersApi.types'
 import keycloak from '@/lib/keycloak'
 import { PayloadAction } from '@reduxjs/toolkit'
+
+const toDto = (data: UserInput): UserInputDto => {
+  return [data].map((e): UserInputDto => {
+    return {
+      _id: e._id,
+      name: e.name,
+      email: e.email,
+      role: e.role.map((r) => r._id!!),
+      version: e.version,
+    }
+  })[0]
+}
 
 export const usersApi = createApi({
   tagTypes: ['users', 'usersCount'],
@@ -34,11 +46,18 @@ export const usersApi = createApi({
       query: () => `/usersCount`,
       providesTags: ['usersCount'],
     }),
+    getUser: builder.query<User, string>({
+      query: (id: string) => ({
+        url: `/users/${id}`,
+        method: 'GET',
+      }),
+    }),
+    // note: no optimistic locking here, because we don't know the ID for the new user, so we don't know where to put it
     createUser: builder.mutation({
       query: (data: UserInput) => ({
         url: '/users',
         method: 'POST',
-        body: data,
+        body: toDto(data),
       }),
       invalidatesTags: ['users', 'usersCount'],
     }),
@@ -46,8 +65,31 @@ export const usersApi = createApi({
       query: (data: UserInput) => ({
         url: `/users/${data._id}`,
         method: 'PUT',
-        body: data,
+        body: toDto(data),
       }),
+      async onQueryStarted({ _id, name, email, role }, { dispatch, queryFulfilled, getState }) {
+        for (const { endpointName, originalArgs } of usersApi.util.selectInvalidatedBy(getState(), [
+          { type: 'users' },
+        ])) {
+          if (endpointName !== 'getAllUsers') continue
+          const patchResult = dispatch(
+            usersApi.util.updateQueryData(endpointName, originalArgs, (draft) => {
+              return draft.map((e): User => {
+                if (e._id === _id) {
+                  return { ...e, name: '' + name, email: email, role: role }
+                } else {
+                  return e
+                }
+              })
+            })
+          )
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        }
+      },
       invalidatesTags: ['users', 'usersCount'],
     }),
     deleteUser: builder.mutation({
@@ -55,6 +97,21 @@ export const usersApi = createApi({
         url: `/users/${data}`,
         method: 'DELETE',
       }),
+      async onQueryStarted(data, { dispatch, queryFulfilled, getState }) {
+        for (const { endpointName, originalArgs } of usersApi.util.selectInvalidatedBy(getState(), [
+          { type: 'users' },
+        ])) {
+          if (endpointName !== 'getAllUsers') continue
+          const patchResult = dispatch(
+            usersApi.util.updateQueryData(endpointName, originalArgs, (draft) => draft.filter((e) => e._id !== data))
+          )
+          try {
+            await queryFulfilled
+          } catch {
+            patchResult.undo()
+          }
+        }
+      },
       invalidatesTags: ['users', 'usersCount'],
     }),
   }),

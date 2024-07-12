@@ -60,7 +60,7 @@ export const UserDialog = ({ children, data, roles, submit }: UserDialogProps) =
         _id: values._id,
         name: values.name,
         email: values.email,
-        role: [...values.role],
+        role: [...values.role.map((e) => roles.find((role) => role._id === e)!!)],
         version: values.version,
       })
     }
@@ -81,7 +81,10 @@ export const UserDialog = ({ children, data, roles, submit }: UserDialogProps) =
               form.setValue('_id', data._id)
               form.setValue('name', data.name)
               form.setValue('email', data.email)
-              form.setValue('role', data.role)
+              form.setValue(
+                'role',
+                data.role.map((e) => e._id!!)
+              )
               form.setValue('version', data.version)
             }
           }

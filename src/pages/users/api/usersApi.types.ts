@@ -23,13 +23,15 @@ export interface User {
   modifiedDate: string | undefined
 }
 
-export interface UserInput {
+export interface UserInput<T = Role[]> {
   _id: string | undefined
   name: string
   email: string
-  role: string[]
+  role: T
   version: number | undefined
 }
+
+export type UserInputDto = UserInput<string[]>
 
 export class Page {
   page: number
